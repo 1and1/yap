@@ -1,20 +1,16 @@
 require 'test_helper'
 
 class TestYap < MiniTest::Test
-  def setup
-    User.include Paginatable unless User.include? Paginatable
-  end
-
   def test_default_parameters
     page = User.paginate
 
-    assert_equal User.first, page.first                     # default page: 1
-    assert_equal Paginatable::DEFAULT_PER_PAGE, page.size   # default per_page: Paginatable::DEFAULT_PER_PAGE
-    assert page.first.id < page.second.id                   # default sort/direction: id/asc
+    assert_equal User.first, page.first              # default page: 1
+    assert_equal Yap::DEFAULTS.per_page, page.size
+    assert page.first.id < page.second.id            # default sort/direction: id/asc
   end
 
   def test_page
-    assert_equal User.offset(Paginatable::DEFAULT_PER_PAGE).first, User.paginate(page: 2).first
+    assert_equal User.offset(Yap::DEFAULTS.per_page).first, User.paginate(page: 2).first
   end
 
   def test_per_page
@@ -44,35 +40,35 @@ class TestYap < MiniTest::Test
   end
 
   def test_incorrect_parameters
-    assert_raises Paginatable::PaginationError do
+    assert_raises Yap::PaginationError do
       User.paginate(page: 'not_a_number')
     end
 
-    assert_raises Paginatable::PaginationError do
+    assert_raises Yap::PaginationError do
       User.paginate(per_page: 'not_a_number')
     end
 
-    assert_raises Paginatable::PaginationError do
+    assert_raises Yap::PaginationError do
       User.paginate(sort: 'not_a_column')
     end
 
-    assert_raises Paginatable::PaginationError do
+    assert_raises Yap::PaginationError do
       User.paginate(direction: 'not_a_direction')
     end
   end
 
   def test_page_out_of_range
-    assert_raises Paginatable::PaginationError do
+    assert_raises Yap::PaginationError do
       User.paginate(page: '-1')
     end
-    assert_raises Paginatable::PaginationError do
+    assert_raises Yap::PaginationError do
       User.paginate(page: '0')
     end
 
-    assert_raises Paginatable::PaginationError do
+    assert_raises Yap::PaginationError do
       User.paginate(per_page: '-1')
     end
-    assert_raises Paginatable::PaginationError do
+    assert_raises Yap::PaginationError do
       User.paginate(per_page: '0')
     end
   end
