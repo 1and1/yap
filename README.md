@@ -6,7 +6,7 @@ Yet another paginator for Ruby on Rails, which adds a `paginate` scope to your A
 Setup
 -----
 
-To setup default parameters call Yap configure. You can access the defaults as block parameter.
+To setup default parameters call `Yap.configure`. You can access the defaults as block parameter.
 
     Yap.configure do |defaults|
       defaults.page = 1
