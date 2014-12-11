@@ -9,9 +9,9 @@ require 'active_support/concern'
 #   User.paginate(
 #       page:       1,
 #       per_page:   10,
-#       sort:       'id',
+#       sort:       :id,
 #       direction   :asc
-#   )                     # => Invocation with default options.
+#   )                     # => Invocation with custom options.
 #
 # @param [Hash] the parameters used for pagination (:page, :per_page, :sort, :direction)
 #
