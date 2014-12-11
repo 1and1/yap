@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TestYap < MiniTest::Test
+class TestYap < ActiveSupport::TestCase
   def test_default_parameters
     page = User.paginate
 
@@ -79,9 +79,9 @@ class TestYap < MiniTest::Test
 
   def test_chaining
     page = User.where.not(date_of_birth: nil).paginate
-    assert !page.empty?
+    assert_not_empty page
     page.each do |user|
-      assert !user.date_of_birth.nil?
+      assert_not_nil user.date_of_birth
     end
   end
 end
