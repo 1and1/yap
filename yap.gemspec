@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'yap'
-  s.version     = '0.0.0'
+  s.version     = '0.0.1'
   s.date        = '2014-12-09'
   s.summary     = 'Yet another paginator for Ruby on Rails'
   s.description = 'Yet another paginator for Ruby on Rails, which adds a paginate scope to your ActiveRecords.'
@@ -10,6 +10,6 @@ Gem::Specification.new do |s|
   s.homepage    = 'http://rubygems.org/gems/yap'
   s.license     = 'GPL v2'
   
-  s.add_development_dependency 'activerecord', '~> 4.1.0'
-  s.add_development_dependency 'sqlite3'
+  s.add_runtime_dependency 'activerecord', '~> 4.1'
+  s.add_development_dependency 'sqlite3', '~> 1.3'
 end
