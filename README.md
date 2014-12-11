@@ -1,10 +1,8 @@
-yap
-===
+# yap
 
 Yet another paginator for Ruby on Rails, which adds a `paginate` scope to your ActiveRecords.
 
-Setup
------
+## Setup
 
 Include `Yap` into your models to add the `paginate` scope like so:
 
@@ -12,7 +10,7 @@ Include `Yap` into your models to add the `paginate` scope like so:
       include Yap
     end
 
-(optional) The options from the example below are the defaults which are applied if you do not set your own.
+###### Optional
 
 To setup default parameters call `Yap.configure`. You can access the defaults as block parameter. Call this somewhere in
 `config/initializers/`.
@@ -24,8 +22,9 @@ To setup default parameters call `Yap.configure`. You can access the defaults as
       defaults.direction = :asc
     end
 
-Usage
------
+The options from the example below are the defaults which are applied if you do not set your own.
+
+## Usage
 
 Assuming you included `Yap` into `User`, you can now do something like this:
 
@@ -35,11 +34,11 @@ Assuming you included `Yap` into `User`, you can now do something like this:
         page:       1,
         per_page:   10,
         sort:       :id,
-        direction   :asc
+        direction:  :asc
     )                     # => Invocation with custom options.
 
 Yap will convert strings to symbols or numbers and vice versa where necessary. If an option cannot be parsed it will
-raise `Yap::PaginationError`. I suggest to use `rescue_from` in an `ActionController` to handle such a case.
+raise `Yap::PaginationError`. I suggest to use `rescue_from` in the controller to handle such a case.
 
     rescue_from Yap::PaginationError, with: :handle_pagination_error
 
