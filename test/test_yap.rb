@@ -18,8 +18,8 @@ class TestYap < MiniTest::Test
   end
 
   def test_sort
-    page = User.paginate(sort: :identifier)
-    assert page.first.identifier < page.second.identifier
+    page = User.paginate(sort: :name)
+    assert page.first.name < page.second.name
   end
 
   def test_direction
@@ -30,13 +30,13 @@ class TestYap < MiniTest::Test
   def test_parameters_as_string
     page = User.paginate(
         page: '2',
-        per_page: '15',
-        sort: 'identifier',
+        per_page: '5',
+        sort: 'name',
         direction: 'desc'
     )
-    assert_equal User.order(identifier: :desc).offset(15).first, page.first
-    assert_equal 15, page.size
-    assert page.second.identifier < page.first.identifier
+    assert_equal User.order(name: :desc).offset(5).first, page.first
+    assert_equal 5, page.size
+    assert page.second.name < page.first.name
   end
 
   def test_incorrect_parameters
@@ -78,10 +78,10 @@ class TestYap < MiniTest::Test
   end
 
   def test_chaining
-    page = User.where(enabled: false).paginate
-    assert_not_empty page
+    page = User.where.not(date_of_birth: nil).paginate
+    assert !page.empty?
     page.each do |user|
-      assert_not user.enabled
+      assert !user.date_of_birth.nil?
     end
   end
 end

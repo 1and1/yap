@@ -3,7 +3,7 @@ ActiveRecord::Schema.define do
 
   create_table :users, :force => true do |t|
     t.string :name
-    t.integer :age
+    t.datetime :date_of_birth
 
     t.timestamps
   end
