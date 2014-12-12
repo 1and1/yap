@@ -9,6 +9,8 @@ Gem::Specification.new do |s|
   s.files       = ['lib/yap.rb']
   s.homepage    = 'http://rubygems.org/gems/yap'
   s.license     = 'GPL v2'
+
+  s.required_ruby_version = '>= 2.1.0'
   
   s.add_runtime_dependency 'activerecord', '~> 4.1'
   s.add_development_dependency 'sqlite3', '~> 1.3'
