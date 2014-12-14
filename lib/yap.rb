@@ -35,17 +35,17 @@ module Yap
     private
 
     def self.extract_pagination_params(params)
-      page = params[:page].present? ? extract_number(params[:page]) : DEFAULTS.page
-      per_page = params[:per_page].present? ? extract_number(params[:per_page]) : DEFAULTS.per_page
-      sort = params[:sort].present? ? extract_sort(params[:sort]) : DEFAULTS.sort
-      direction = params[:direction].present? ? extract_direction(params[:direction]) : DEFAULTS.direction
+      page = extract_number(params[:page], DEFAULTS.page)
+      per_page = extract_number(params[:per_page], DEFAULTS.per_page)
+      sort = extract_sort(params[:sort])
+      direction = extract_direction(params[:direction])
 
       return page, per_page, sort, direction
     end
 
-    def self.extract_number(number)
+    def self.extract_number(number, default)
       begin
-        number = Integer(number)
+        number = number.present? ? Integer(number) : default
       rescue
         raise PaginationError.new("'#{number}' is not a valid number.")
       end
@@ -55,14 +55,26 @@ module Yap
     end
 
     def self.extract_sort(sort)
+      sort = sort.present? ? sort : DEFAULTS.sort
       raise PaginationError.new("Cannot sort by '#{sort}'.") unless column_names.include? sort.to_s
       sort
     end
 
     def self.extract_direction(direction)
-      dir = direction.downcase.to_sym
+      dir = direction.present? ? direction.downcase.to_sym : DEFAULTS.direction
       raise PaginationError.new("'#{direction}' is not a valid direction. Use 'asc' or 'desc'.") unless [:asc, :desc].include? dir
       dir
+    end
+  end
+
+  def self.included(base)
+    base.extend ClassMethods
+  end
+
+  module ClassMethods
+    def last_page(params)
+      per_page = extract_number(params[:per_page], DEFAULTS.per_page)
+      (count / per_page.to_f).ceil
     end
   end
 

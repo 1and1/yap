@@ -84,4 +84,13 @@ class TestYap < ActiveSupport::TestCase
       assert_not_nil user.date_of_birth
     end
   end
+
+  def test_last_page
+    params = { per_page: 3 }
+    # last page should have 3 or less users
+    assert User.paginate(params.merge(page: User.last_page(params))).size <= params[:per_page]
+
+    # the page beyond last page should be empty
+    assert_empty User.paginate(params.merge(page: User.last_page(params)+1))
+  end
 end
