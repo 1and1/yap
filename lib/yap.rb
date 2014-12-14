@@ -27,6 +27,8 @@ module Yap
   end
 
   included do
+    extend ClassMethods
+
     scope :paginate, -> (params = {}) {
       page, per_page, sort, direction = extract_pagination_params(params)
       limit(per_page).offset((page-1)*per_page).order(sort => direction)
@@ -65,10 +67,6 @@ module Yap
       raise PaginationError.new("'#{direction}' is not a valid direction. Use 'asc' or 'desc'.") unless [:asc, :desc].include? dir
       dir
     end
-  end
-
-  def self.included(base)
-    base.extend ClassMethods
   end
 
   module ClassMethods
