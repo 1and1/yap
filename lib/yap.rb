@@ -18,8 +18,8 @@ require 'active_support/concern'
 module Yap
   extend ActiveSupport::Concern
 
-  DEFAULTS = Struct.new(:page, :per_page, :sort, :direction)
-                 .new(1, 10, :id, :asc)
+  DEFAULTS = Struct.new(:page, :per_page, :sort, :direction, :disable_warnings)
+                 .new(1, 10, 'id', 'ASC', false)
 
   def self.configure
     raise ArgumentError, 'No block given.' unless block_given?
@@ -30,8 +30,8 @@ module Yap
     extend ClassMethods
 
     scope :paginate, -> (params = {}) {
-      page, per_page, sort, direction = extract_pagination_params(params)
-      limit(per_page).offset((page-1)*per_page).order(sort => direction)
+      page, per_page, column, direction = extract_pagination_params(params)
+      limit(per_page).offset((page-1)*per_page).order("#{column} #{direction}")
     }
 
     private
@@ -39,7 +39,7 @@ module Yap
     def self.extract_pagination_params(params)
       page = extract_number(params[:page], DEFAULTS.page)
       per_page = extract_number(params[:per_page], DEFAULTS.per_page)
-      sort = extract_sort(params[:sort])
+      sort = extract_column(params[:sort])
       direction = extract_direction(params[:direction])
 
       return page, per_page, sort, direction
@@ -56,16 +56,27 @@ module Yap
       number
     end
 
-    def self.extract_sort(sort)
-      sort = sort.present? ? sort : DEFAULTS.sort
-      raise PaginationError.new("Cannot sort by '#{sort}'.") unless column_names.include? sort.to_s
-      sort
+    def self.extract_column(sort)
+      column = map_column(sort.present? ? sort.to_s.downcase : DEFAULTS.sort)
+      raise PaginationError.new("Cannot sort by '#{sort}'.") unless column
+      column
     end
 
     def self.extract_direction(direction)
-      dir = direction.present? ? direction.downcase.to_sym : DEFAULTS.direction
-      raise PaginationError.new("'#{direction}' is not a valid direction. Use 'asc' or 'desc'.") unless [:asc, :desc].include? dir
+      dir = direction.present? ? direction.to_s.upcase : DEFAULTS.direction
+      raise PaginationError.new("'#{direction}' is not a valid direction. Use 'asc' or 'desc'.") unless %w[ASC DESC].include? dir
       dir
+    end
+
+    private
+
+    def self.map_column(name)
+      begin
+        map_name_to_column(name)
+      rescue
+        warn "#{self.name} does not implement map_name_to_column. If you do not need column mapping set disable_warnings=true" unless DEFAULTS.disable_warnings
+        nil
+      end || (column_names.include?(name) ? name : nil)
     end
   end
 

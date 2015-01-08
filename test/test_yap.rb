@@ -18,13 +18,13 @@ class TestYap < ActiveSupport::TestCase
   end
 
   def test_sort
-    page = User.paginate(sort: :name)
-    assert page.first.name < page.second.name
+    page = User.paginate(sort: :name).map(&:name)
+    assert_equal page, page.sort
   end
 
   def test_direction
-    page = User.paginate(direction: :desc)
-    assert page.second.id < page.first.id
+    page = User.paginate(direction: :desc).map(&:id)
+    assert_equal page, page.sort.reverse
   end
 
   def test_parameters_as_string
@@ -36,7 +36,7 @@ class TestYap < ActiveSupport::TestCase
     )
     assert_equal User.order(name: :desc).offset(5).first, page.first
     assert_equal 5, page.size
-    assert page.second.name < page.first.name
+    assert_equal page.map(&:name), page.map(&:name).sort.reverse
   end
 
   def test_incorrect_parameters
@@ -92,5 +92,25 @@ class TestYap < ActiveSupport::TestCase
 
     # the page beyond last page should be empty
     assert_empty User.paginate(params.merge(page: User.last_page(params)+1))
+  end
+
+  def test_sort_with_alias
+    dobs = User.paginate(sort: 'birthday').to_a.map(&:date_of_birth)
+    assert_equal dobs, dobs.sort
+  end
+
+  def test_sort_by_association
+    teams = User.joins(:team).paginate(sort: 'team').map(&:team).map(&:name)
+    assert_equal teams, teams.sort
+  end
+
+  def test_undefined_method
+    # For Team map_name_to_column does not exist. Disable warning.
+    Yap.configure do |d|
+      d.disable_warnings = true
+    end
+    assert_nothing_raised do
+      Team.paginate(sort: 'name')
+    end
   end
 end

@@ -4,7 +4,12 @@ ActiveRecord::Schema.define do
   create_table :users, :force => true do |t|
     t.string :name
     t.datetime :date_of_birth
+    t.belongs_to :team
 
     t.timestamps
+  end
+
+  create_table :teams, :force => true do |t|
+    t.string :name
   end
 end
