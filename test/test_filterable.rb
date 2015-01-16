@@ -76,5 +76,8 @@ class FilterableTest < ActiveSupport::TestCase
     assert users.size <= per_page
     assert users.size <= team.users.size
     assert_includes [per_page, team.users.size], users.size
+    users.each do |user|
+      assert_equal team.id, user.team_id
+    end
   end
 end
