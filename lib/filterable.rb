@@ -6,26 +6,26 @@ require 'active_support/concern'
 # TODO: need doc
 #
 module Yap
-module Filterable
-  extend ActiveSupport::Concern
+  module Filterable
+    extend ActiveSupport::Concern
 
-  included do
-    scope :filter, -> (params = nil) {
-      if params.blank?
-        all
-      else
-        filter = extract_filter_params(params)
-        where(filter[:where]).where.not(filter[:not])
-      end
-    }
-
-    private
-
-    def self.extract_filter_params(params)
-      filter = {
-          where: {},
-          not: {}
+    included do
+      scope :filter, -> (params = nil) {
+        if params.blank?
+          all
+        else
+          filter = extract_filter_params(params)
+          where(filter[:where]).where.not(filter[:not])
+        end
       }
+
+      private
+
+      def self.extract_filter_params(params)
+        filter = {
+            where: {},
+            not: {}
+        }
 
         failed = []
         params.each do |key, values|
