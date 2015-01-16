@@ -1,5 +1,5 @@
 require 'active_support/concern'
-require 'exceptions'
+require 'yap/exceptions'
 
 ##
 # Include into model to have Model.filter available

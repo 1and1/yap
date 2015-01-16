@@ -1,6 +1,6 @@
 require 'active_support/concern'
-require 'exceptions'
-require 'filterable'
+require 'yap/exceptions'
+require 'yap/filterable'
 
 ##
 # Include into model to make it paginatable. The paginate scope takes a hash as only parameter. All options are optional
