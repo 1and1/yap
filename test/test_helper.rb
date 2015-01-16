@@ -17,6 +17,7 @@ Team.create!(name: 'User')
   User.create!(
           name: (('a'..'z').to_a + ('A'..'Z').to_a ).shuffle[0,12].join,
           date_of_birth: Time.now - (10 + rand(20)).years - rand(12).months - rand(365).days,
-          team: Team.all.sample
+          gender: %w(m f).sample,
+          team: (Team.all << nil).sample
   )
 end

@@ -1,4 +1,5 @@
 require 'active_support/concern'
+require 'filterable'
 
 ##
 # Include into model to make it paginatable. The paginate scope takes a hash as only parameter. All options are optional
@@ -17,6 +18,7 @@ require 'active_support/concern'
 #
 module Yap
   extend ActiveSupport::Concern
+  include Filterable
 
   DEFAULTS = Struct.new(:page, :per_page, :sort, :direction, :disable_warnings)
                  .new(1, 10, 'id', 'ASC', false)
