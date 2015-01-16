@@ -58,4 +58,12 @@ class FilterableTest < ActiveSupport::TestCase
       assert_equal 'f', user.gender
     end
   end
+
+  def test_empty_filter
+    users = User.filter(nil)
+    assert_equal User.count, users.size
+
+    users = User.filter
+    assert_equal User.count, users.size
+  end
 end

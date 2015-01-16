@@ -10,7 +10,7 @@ module Filterable
   extend ActiveSupport::Concern
 
   included do
-    scope :filter, -> (params) {
+    scope :filter, -> (params = nil) {
       filter = extract_filter_params(params || {})
       where(filter[:where]).where.not(filter[:not])
     }
