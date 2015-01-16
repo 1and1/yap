@@ -2,6 +2,7 @@ require 'active_record'
 require 'minitest/autorun'
 require 'pp'
 require 'yap'
+require 'exceptions'
 
 ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')
 

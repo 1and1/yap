@@ -1,4 +1,5 @@
 require 'active_support/concern'
+require 'exceptions'
 require 'filterable'
 
 ##
@@ -88,6 +89,4 @@ module Yap
       (count / per_page.to_f).ceil
     end
   end
-
-  class PaginationError < StandardError; end
 end

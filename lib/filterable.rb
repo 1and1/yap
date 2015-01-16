@@ -1,4 +1,5 @@
 require 'active_support/concern'
+require 'exceptions'
 
 ##
 # Include into model to have Model.filter available
@@ -54,6 +55,4 @@ module Yap
       end
     end
   end
-
-  class FilterError < StandardError; end
 end
