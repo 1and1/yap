@@ -33,7 +33,7 @@ module Yap
 
     scope :paginate, -> (params = {}) {
       page, per_page, column, direction = extract_pagination_params(params)
-      limit(per_page).offset((page-1)*per_page).order("#{column} #{direction}")
+      filter(params[:filter]).limit(per_page).offset((page-1)*per_page).order("#{column} #{direction}")
     }
 
     private

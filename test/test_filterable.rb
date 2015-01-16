@@ -66,4 +66,15 @@ class FilterableTest < ActiveSupport::TestCase
     users = User.filter
     assert_equal User.count, users.size
   end
+
+  def test_combined_paginate
+    team = Team.first
+    per_page = 3
+    users = User.paginate(per_page: per_page, filter: { team_id: team.id })
+
+    # Size is either restricted by pagination or filter
+    assert users.size <= per_page
+    assert users.size <= team.users.size
+    assert_includes [per_page, team.users.size], users.size
+  end
 end
