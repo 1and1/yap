@@ -106,3 +106,7 @@ raise `Yap::PaginationError`. I suggest to use `rescue_from` in the controller t
         respond_with User.joins(:team).paginate(params)
       end
     end
+
+## ToDos
+
+* Document filtering

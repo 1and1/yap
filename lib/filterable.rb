@@ -3,7 +3,7 @@ require 'active_support/concern'
 ##
 # Include into model to have Model.filter available
 #
-# TODO: need doc
+# TODO need doc
 #
 module Yap
   module Filterable
@@ -29,6 +29,7 @@ module Yap
 
         failed = []
         params.each do |key, values|
+          # TODO Add mapping support
           failed << key unless column_names.include? key.to_s
           values.to_s.split(',').each do |value|
             # Perform negative match if value starts with '!'.
