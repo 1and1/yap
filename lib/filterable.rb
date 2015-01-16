@@ -11,8 +11,12 @@ module Filterable
 
   included do
     scope :filter, -> (params = nil) {
-      filter = extract_filter_params(params || {})
-      where(filter[:where]).where.not(filter[:not])
+      if params.blank?
+        all
+      else
+        filter = extract_filter_params(params)
+        where(filter[:where]).where.not(filter[:not])
+      end
     }
 
     private
