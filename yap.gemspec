@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = 'Yet another paginator for Ruby on Rails, which adds a paginate scope to your ActiveRecords.'
   s.authors     = ['Finn Glöe']
   s.email       = 'finn.gloee@1und1.de'
-  s.files       = ['lib/*']
+  s.files       = Dir.glob('lib/*') + %w(LICENSE README.md)
   s.homepage    = 'http://rubygems.org/gems/yap'
   s.license     = 'GPL v2'
 
