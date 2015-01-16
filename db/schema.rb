@@ -7,7 +7,7 @@ ActiveRecord::Schema.define do
     t.string :gender
     t.belongs_to :team
 
-    t.timestamps
+    t.timestamps null: false
   end
 
   create_table :teams, :force => true do |t|

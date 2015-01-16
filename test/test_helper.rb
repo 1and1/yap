@@ -1,13 +1,14 @@
 require 'active_record'
 require 'minitest/autorun'
 require 'pp'
+require 'yap'
 
 ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')
 
 require './db/schema'
 require './db/models'
 
-require 'yap'
+ActiveSupport.test_order = :random
 
 Team.create!(name: 'Operator')
 Team.create!(name: 'Moderator')
