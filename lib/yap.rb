@@ -3,19 +3,20 @@ require 'yap/exceptions'
 require 'yap/filterable'
 
 ##
-# Include into model to make it paginatable. The paginate scope takes a hash as only parameter. All options are optional
-# and can be combined arbitrarily.
+# Include into model to make it paginatable. The paginate scope takes a hash as parameter. All options are optional and
+# can be combined arbitrarily.
 #
-#   User.paginate         # => Page 1 with default order and size.
-#   User.paginate(params) # => Use this in controller to pass query parameters.
+#   User.paginate           # => Page 1 with default order and size.
+#   User.paginate(params)   # => Passing parameters in controller.
 #   User.paginate(
 #       page:       1,
 #       per_page:   10,
 #       sort:       :id,
 #       direction:  :asc
-#   )                     # => Invocation with custom options.
+#   )                       # => Invocation with custom options.
 #
 # @param [Hash] the parameters used for pagination (:page, :per_page, :sort, :direction)
+# @see Filterable Filter results by attributes.
 #
 module Yap
   extend ActiveSupport::Concern
