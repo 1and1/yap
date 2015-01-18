@@ -3,8 +3,8 @@ require 'yap/exceptions'
 require 'yap/filterable'
 
 ##
-# Include into model to make it paginatable. The paginate scope takes a hash as parameter. All options are optional and
-# can be combined arbitrarily.
+# Support for Active Record pagination. All options can be safely accessed by the user through url query parameters. To
+# get the number of the last page call the last_page method with the same parameters as the pagination.
 #
 #   User.paginate           # => Page 1 with default order and size.
 #   User.paginate(params)   # => Passing parameters in controller.
@@ -15,7 +15,9 @@ require 'yap/filterable'
 #       direction:  :asc
 #   )                       # => Invocation with custom options.
 #
-# @param [Hash] the parameters used for pagination (:page, :per_page, :sort, :direction)
+#   User.last_page          # => Last page as a number for defaults
+#   User.last_page(params)  # => Last page for given params. Works the same way as paginate.
+#
 # @see Filterable Filter results by attributes.
 #
 module Yap
@@ -30,9 +32,21 @@ module Yap
     yield(DEFAULTS)
   end
 
+  module ClassMethods
+    def last_page(params)
+      per_page = extract_number(params[:per_page], DEFAULTS.per_page)
+      (count / per_page.to_f).ceil
+    end
+  end
+
   included do
     extend ClassMethods
 
+    ##
+    # The paginate scope takes a hash as parameter. All options are optional and can be combined arbitrarily.
+    #
+    # @param [Hash] The parameters used for pagination (:page, :per_page, :sort, :direction)
+    #
     scope :paginate, -> (params = {}) {
       page, per_page, column, direction = extract_pagination_params(params)
       filter(params[:filter]).limit(per_page).offset((page-1)*per_page).order("#{column} #{direction}")
@@ -81,13 +95,6 @@ module Yap
         warn "#{self.name} does not implement map_name_to_column. If you do not need column mapping set disable_warnings=true" unless DEFAULTS.disable_warnings
         nil
       end || (column_names.include?(name) ? name : nil)
-    end
-  end
-
-  module ClassMethods
-    def last_page(params)
-      per_page = extract_number(params[:per_page], DEFAULTS.per_page)
-      (count / per_page.to_f).ceil
     end
   end
 end

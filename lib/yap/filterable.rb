@@ -18,13 +18,16 @@ require 'yap/exceptions'
 #       filter: { 'team' => 'null' }
 #   )                                    # => Combining filter and pagination.
 #
-# @param [Hash] attribute/value pairs to filter ( { 'gender' => 'f' } )
-#
 module Yap
   module Filterable
     extend ActiveSupport::Concern
 
     included do
+      ##
+      # Filter scope can be invoked explicitly or implicitly by passing :filter to paginate.
+      #
+      # @param [Hash] attribute/value pairs to filter ( { 'gender' => 'f' } )
+      #
       scope :filter, -> (params = nil) {
         if params.blank?
           all

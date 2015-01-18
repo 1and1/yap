@@ -1,4 +1,4 @@
-# yap v0.1.0
+# yap v0.2.0
 
 Yet another paginator for Ruby on Rails, which adds a `paginate` scope to your ActiveRecords.
 
@@ -11,7 +11,7 @@ Include `Yap` into your models to add the `paginate` scope like so:
       belongs_to :team
     end
 
-###### Defaults (optional)
+##### Defaults (optional)
 
 To setup default parameters call `Yap.configure`. You can access the defaults as block parameter. Call this somewhere in
 `config/initializers/`.
@@ -26,7 +26,7 @@ To setup default parameters call `Yap.configure`. You can access the defaults as
 
 The above settings will be applied if you do not set your own.
 
-###### Custom Naming (optional)
+##### Custom Naming (optional)
 
 ActiveRecords can implement the method map_name_to_column to define aliases for columns. This can be useful to hide
 internal naming from users and to make sorting by associations possible (more on this below).
@@ -45,19 +45,32 @@ internal naming from users and to make sorting by associations possible (more on
 
 Assuming you included `Yap` into `User`, you can now do something like this:
 
-    User.paginate           # => Page 1 with default order and size.
-    User.paginate(params)   # => Use this in controller to pass query parameters.
+    User.paginate                       # => Page 1 with default order and size.
     User.paginate(
         page:       1,
         per_page:   10,
         sort:       'id',
         direction:  'ASC'
-    )                       # => Invocation with custom options.
+    )                                   # => Invocation with custom options.
 
-    User.last_page          # => Last page as a number for defaults
-    User.last_page(params)  # => Last page for given params. Works the same way as paginate.
+    User.last_page                      # => Last page as a number for defaults
+    User.last_page(params)              # => Last page for given params. Works the same way as paginate.
 
-Yap will convert strings to symbols or numbers and vice versa where necessary.
+    User.filter('gender' => 'f')        # => All female users.
+    User.filter(
+        'team_id' => '1,2',
+        'gender' => 'm'
+    )                                   # => All males of teams 1 and 2.
+    User.filter('team_id' => '!null')   # => All users with any team.
+    User.paginate(
+        page:   1,
+        filter: { 'team' => 'null' }
+    )                                   # => Combining filter and pagination.
+
+    User.paginate(params)               # => Passing parameters in controller (http://localhost/users?filter[gender]=f)
+
+Yap will convert strings to symbols or numbers and vice versa where necessary. This make the last one a really powerful
+method of offering the pagination API directly to the user.
 
 ### Advanced
 
@@ -69,12 +82,12 @@ association to make this work. Example:
 
 ## Error Handling
 
-If an option cannot be parsed it will
-raise `Yap::PaginationError`. I suggest to use `rescue_from` in the controller to handle such a case.
+If an option cannot be parsed it will raise `Yap::PaginationError` or `Yap::FilterError`, which are both
+`Yap::YapError`s. I suggest to use `rescue_from` in the controller to handle such a case.
 
-    rescue_from Yap::PaginationError, with: :handle_pagination_error
+    rescue_from Yap::YapError, with: :handle_yap_error
 
-    def handle_pagination_error
+    def handle_yap_error
       # generate user friendly error here, set flash[:error] or whatever you like.
     end
 
@@ -96,9 +109,9 @@ raise `Yap::PaginationError`. I suggest to use `rescue_from` in the controller t
     end
 
     class UsersController < ApplicationController
-      rescue_from Yap::PaginationError, with: :handle_pagination_error
+      rescue_from Yap::YapError, with: :handle_yap_error
 
-      def handle_pagination_error
+      def handle_yap_error
         # generate user friendly error here, set flash[:error] or whatever you like.
       end
 
@@ -109,4 +122,4 @@ raise `Yap::PaginationError`. I suggest to use `rescue_from` in the controller t
 
 ## ToDos
 
-* Document filtering
+* Methods for generating next, previous and last page links
