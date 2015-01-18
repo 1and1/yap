@@ -46,9 +46,10 @@ class FilterableTest < ActiveSupport::TestCase
   end
 
   def test_incorrect_parameters
-    assert_raises Yap::FilterError do
+    ex = assert_raises Yap::FilterError do
       User.filter(not_a_column: 'null')
     end
+    assert_match 'not_a_column', ex.message
   end
 
   def test_chaining

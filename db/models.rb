@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
 
   COLUMN_MAP = {
       'team' => 'teams.name',
-      'birthday' => 'date_of_birth'
+      'birthday' => 'date_of_birth',
+      'sex' => 'gender'
   }
   def self.map_name_to_column(name)
     return COLUMN_MAP[name]

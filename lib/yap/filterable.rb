@@ -1,5 +1,6 @@
 require 'active_support/concern'
 require 'yap/exceptions'
+require 'yap/column_mapper'
 
 ##
 # ActiveRecords can be filtered by their attributes if either Yap or Filterable is included into the model. Filters can
@@ -23,10 +24,12 @@ module Yap
     extend ActiveSupport::Concern
 
     included do
+      extend ColumnMapper
+
       ##
       # Filter scope can be invoked explicitly or implicitly by passing :filter to paginate.
       #
-      # @param [Hash] attribute/value pairs to filter ( { 'gender' => 'f' } )
+      # @param [Hash] Attribute/value pairs to filter ( { 'gender' => 'f' } )
       #
       scope :filter, -> (params = nil) {
         if params.blank?
@@ -47,22 +50,25 @@ module Yap
 
         failed = []
         params.each do |key, values|
-          # TODO Add mapping support
-          failed << key unless column_names.include? key.to_s
-          values.to_s.split(',').each do |value|
-            # Perform negative match if value starts with '!'.
-            if value =~/^!(.+)$/
-              match = :not
-              value = $1
-            else
-              match = :where
+          column = map_column(key.to_s.downcase)
+          if column
+            values.to_s.split(',').each do |value|
+              # Perform negative match if value starts with '!'.
+              if value =~/^!(.+)$/
+                match = :not
+                value = $1
+              else
+                match = :where
+              end
+
+              # Ensure filter contains an array to append to.
+              filter[match][column] ||= []
+
+              # Convert null to ruby nil to use 'IS NULL' in SQL.
+              filter[match][column] << (value.downcase == 'null' ? nil : value)
             end
-
-            # Ensure filter contains an array to append to.
-            filter[match][key] ||= []
-
-            # Convert null to ruby nil to use 'IS NULL' in SQL.
-            filter[match][key] << (value.downcase == 'null' ? nil : value)
+          else
+            failed << key
           end
         end
 

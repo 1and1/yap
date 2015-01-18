@@ -93,24 +93,4 @@ class TestYap < ActiveSupport::TestCase
     # the page beyond last page should be empty
     assert_empty User.paginate(params.merge(page: User.last_page(params)+1))
   end
-
-  def test_sort_with_alias
-    dobs = User.paginate(sort: 'birthday').to_a.map(&:date_of_birth)
-    assert_equal dobs, dobs.sort
-  end
-
-  def test_sort_by_association
-    teams = User.joins(:team).paginate(sort: 'team').map(&:team).map(&:name)
-    assert_equal teams, teams.sort
-  end
-
-  def test_undefined_method
-    # For Team map_name_to_column does not exist. Disable warning.
-    Yap.configure do |d|
-      d.disable_warnings = true
-    end
-    assert_nothing_raised do
-      Team.paginate(sort: 'name')
-    end
-  end
 end

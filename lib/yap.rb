@@ -1,5 +1,6 @@
 require 'active_support/concern'
 require 'yap/exceptions'
+require 'yap/column_mapper'
 require 'yap/filterable'
 
 ##
@@ -41,6 +42,7 @@ module Yap
 
   included do
     extend ClassMethods
+    extend ColumnMapper
 
     ##
     # The paginate scope takes a hash as parameter. All options are optional and can be combined arbitrarily.
@@ -84,17 +86,6 @@ module Yap
       dir = direction.present? ? direction.to_s.upcase : DEFAULTS.direction
       raise PaginationError.new("'#{direction}' is not a valid direction. Use 'asc' or 'desc'.") unless %w[ASC DESC].include? dir
       dir
-    end
-
-    private
-
-    def self.map_column(name)
-      begin
-        map_name_to_column(name)
-      rescue
-        warn "#{self.name} does not implement map_name_to_column. If you do not need column mapping set disable_warnings=true" unless DEFAULTS.disable_warnings
-        nil
-      end || (column_names.include?(name) ? name : nil)
     end
   end
 end
