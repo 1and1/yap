@@ -3,7 +3,7 @@ Gem::Specification.new do |s|
   s.version     = '0.2.0'
   s.date        = '2015-01-18'
   s.summary     = 'Yet another paginator for Ruby on Rails'
-  s.description = 'Yet another paginator for Ruby on Rails, which adds a paginate scope to your ActiveRecords.'
+  s.description = 'Yet another paginator for Ruby on Rails adding a pagination and filtering interface to ActiveRecords.'
   s.authors     = ['Finn Glöe']
   s.email       = 'finn.gloee@1und1.de'
   s.files       = Dir.glob('lib/**/*') + %w(LICENSE README.md)
