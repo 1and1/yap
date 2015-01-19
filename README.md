@@ -1,4 +1,4 @@
-# yap v0.2.0
+# yap v0.2.1
 
 Yet another paginator for Ruby on Rails, which adds a `paginate` scope to your ActiveRecords.
 
