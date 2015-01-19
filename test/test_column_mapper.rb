@@ -35,5 +35,8 @@ class TestColumnMapper < ActiveSupport::TestCase
     assert_nothing_raised do
       Team.paginate(sort: 'name')
     end
+    assert_nothing_raised do
+      Team.paginate(filer: { 'name' => 'Moderator' } )
+    end
   end
 end

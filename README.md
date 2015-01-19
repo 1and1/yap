@@ -123,3 +123,4 @@ If an option cannot be parsed it will raise `Yap::PaginationError` or `Yap::Filt
 ## ToDos
 
 * Methods for generating next, previous and last page links
+* Maximum for per_page
