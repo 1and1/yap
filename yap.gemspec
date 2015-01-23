@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'yap'
-  s.version     = '0.2.1'
-  s.date        = '2015-01-19'
+  s.version     = '0.3.0'
+  s.date        = '2015-01-23'
   s.summary     = 'Yet another paginator for Ruby on Rails'
   s.description = 'Yet another paginator for Ruby on Rails adding a pagination and filtering interface to ActiveRecords.'
   s.authors     = ['Finn Glöe']

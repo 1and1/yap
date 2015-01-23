@@ -1,4 +1,4 @@
-# yap v0.2.1
+# yap v0.3.0
 
 Yet another paginator for Ruby on Rails, which adds a `paginate` scope to your ActiveRecords.
 
@@ -45,7 +45,7 @@ internal naming from users and to make sorting by associations possible (more on
 
 Assuming you included `Yap` into `User`, you can now do something like this:
 
-    User.paginate                       # => Page 1 with default order and size.
+    User.paginate                       # => Page 1 with default order and size
     User.paginate(
         page:       1,
         per_page:   10,
@@ -56,16 +56,19 @@ Assuming you included `Yap` into `User`, you can now do something like this:
     User.last_page                      # => Last page as a number for defaults
     User.last_page(params)              # => Last page for given params. Works the same way as paginate.
 
-    User.filter('gender' => 'f')        # => All female users.
+    User.filter('gender' => 'f')        # => All female users
     User.filter(
         'team_id' => '1,2',
         'gender' => 'm'
-    )                                   # => All males of teams 1 and 2.
-    User.filter('team_id' => '!null')   # => All users with any team.
+    )                                   # => All males of teams 1 and 2
+    User.filter(
+        'date_of_birth' => '1990-01-01..1991-01-01'
+    )                                   # => All users born in 1990
+    User.filter('team_id' => '!null')   # => All users with any team
     User.paginate(
         page:   1,
         filter: { 'team' => 'null' }
-    )                                   # => Combining filter and pagination.
+    )                                   # => Combining filter and pagination
 
     User.paginate(params)               # => Passing parameters in controller (http://localhost/users?filter[gender]=f)
 
@@ -124,3 +127,4 @@ If an option cannot be parsed it will raise `Yap::PaginationError` or `Yap::Filt
 
 * Methods for generating next, previous and last page links
 * Maximum for per_page
+* Rescue from sql errors
