@@ -1,6 +1,7 @@
 require 'active_support/concern'
 require 'yap/exceptions'
 require 'yap/column_mapper'
+require 'yap/filter'
 
 ##
 # ActiveRecords can be filtered by their attributes if either Yap or Filterable is included into the model. Filters can
@@ -43,30 +44,13 @@ module Yap
       private
 
       def self.extract_filter_params(params)
-        filter = {
-            where: {},
-            not: {}
-        }
+        filter = Filter.new
 
         failed = []
         params.each do |key, values|
           column = map_column(key.to_s.downcase)
           if column
-            values.to_s.split(',').each do |value|
-              # Perform negative match if value starts with '!'.
-              if value =~/^!(.+)$/
-                match = :not
-                value = $1
-              else
-                match = :where
-              end
-
-              # Ensure filter contains an array to append to.
-              filter[match][column] ||= []
-
-              # Convert null to ruby nil to use 'IS NULL' in SQL.
-              filter[match][column] << (value.downcase == 'null' ? nil : value)
-            end
+            filter.parse!(column, values)
           else
             failed << key
           end

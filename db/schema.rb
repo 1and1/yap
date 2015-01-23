@@ -3,7 +3,7 @@ ActiveRecord::Schema.define do
 
   create_table :users, :force => true do |t|
     t.string :name
-    t.datetime :date_of_birth
+    t.date :date_of_birth
     t.string :gender
     t.belongs_to :team
 

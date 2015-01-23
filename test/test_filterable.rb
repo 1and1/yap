@@ -45,6 +45,30 @@ class FilterableTest < ActiveSupport::TestCase
     end
   end
 
+  def test_date_match
+    dob = User.first.date_of_birth
+    users = User.filter(date_of_birth: to_api_date(dob))
+    assert_equal User.where(date_of_birth: dob).size, users.size
+    users.each do |user|
+      assert_equal dob, user.date_of_birth
+    end
+  end
+
+  def test_range_match
+    startdate = Date.today - 30.years
+    enddate = Date.today - 20.years
+    users = User.filter(date_of_birth: '%s..%s' % [to_api_date(startdate), to_api_date(enddate)])
+    assert_equal User.where(date_of_birth: startdate..enddate).size, users.size
+    users.each do |user|
+      assert_includes startdate..enddate, user.date_of_birth
+    end
+  end
+
+  def to_api_date(date)
+    date.strftime('%Y-%m-%d')
+  end
+  private :to_api_date
+
   def test_incorrect_parameters
     ex = assert_raises Yap::FilterError do
       User.filter(not_a_column: 'null')
