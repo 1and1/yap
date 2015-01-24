@@ -15,7 +15,10 @@ module Yap
           match = :where
         end
 
-        if value =~ /(.+)\.\.(.+)/
+        case value
+        when /(.+)\.{3}(.+)/
+          value = $1...$2
+        when /(.+)\.{2}(.+)/
           value = $1..$2
         else
           value = value.downcase == 'null' ? nil : value
