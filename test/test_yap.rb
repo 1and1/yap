@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class TestYap < ActiveSupport::TestCase
+  def setup
+    @saved_defaults = Yap::DEFAULTS.dup
+  end
+
   def test_default_parameters
     page = User.paginate
 
@@ -9,7 +13,22 @@ class TestYap < ActiveSupport::TestCase
     assert page.first.id < page.second.id            # default sort/direction: id/asc
   end
 
-  def test_invalid_default_page
+  def test_valid_default_parameters
+    Yap.configure do |d|
+      d.page = 1
+      d.per_page = 5
+      d.sort = :id
+      d.direction = :desc
+    end
+
+    assert_nothing_raised Yap::PaginationError do
+      User.paginate
+    end
+
+    restore_defaults
+  end
+
+  def test_invalid_default_parameters
     Yap.configure do |d|
       d.page = 'invalid_page'
       d.per_page = 'invalid_per_page'
@@ -43,7 +62,16 @@ class TestYap < ActiveSupport::TestCase
       User.paginate(valid_params.except(:direction))
     end
     assert_match 'invalid_direction', ex.message
+
+    restore_defaults
   end
+
+  def restore_defaults
+    Yap::DEFAULTS.each_with_index do |d, i|
+      Yap::DEFAULTS[i] = @saved_defaults[i]
+    end
+  end
+  private :restore_defaults
 
   def test_page
     assert_equal User.offset(Yap::DEFAULTS.per_page).first, User.paginate(page: 2).first
