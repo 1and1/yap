@@ -66,8 +66,9 @@ module Yap
     end
 
     def self.extract_number(number, default)
+      number ||= default
       begin
-        number = number.present? ? Integer(number) : default
+        number = Integer(number)
       rescue
         raise PaginationError.new("'#{number}' is not a valid number.")
       end
@@ -77,13 +78,15 @@ module Yap
     end
 
     def self.extract_column(sort)
-      column = map_column(sort.present? ? sort.to_s.downcase : DEFAULTS.sort)
+      sort ||= DEFAULTS.sort
+      column = map_column(sort.to_s.downcase)
       raise PaginationError.new("Cannot sort by '#{sort}'.") unless column
       column
     end
 
     def self.extract_direction(direction)
-      dir = direction.present? ? direction.to_s.upcase : DEFAULTS.direction
+      direction ||= DEFAULTS.direction
+      dir = (direction).to_s.upcase
       raise PaginationError.new("'#{direction}' is not a valid direction. Use 'asc' or 'desc'.") unless %w[ASC DESC].include? dir
       dir
     end

@@ -9,6 +9,42 @@ class TestYap < ActiveSupport::TestCase
     assert page.first.id < page.second.id            # default sort/direction: id/asc
   end
 
+  def test_invalid_default_page
+    Yap.configure do |d|
+      d.page = 'invalid_page'
+      d.per_page = 'invalid_per_page'
+      d.sort = 'invalid_sort'
+      d.direction = 'invalid_direction'
+    end
+
+    valid_params = {
+        page: 1,
+        per_page: 5,
+        sort: :id,
+        direction: :desc
+    }
+
+    ex = assert_raises Yap::PaginationError do
+      User.paginate(valid_params.except(:page))
+    end
+    assert_match 'invalid_page', ex.message
+
+    ex = assert_raises Yap::PaginationError do
+      User.paginate(valid_params.except(:per_page))
+    end
+    assert_match 'invalid_per_page', ex.message
+
+    ex = assert_raises Yap::PaginationError do
+      User.paginate(valid_params.except(:sort))
+    end
+    assert_match 'invalid_sort', ex.message
+
+    ex = assert_raises Yap::PaginationError do
+      User.paginate(valid_params.except(:direction))
+    end
+    assert_match 'invalid_direction', ex.message
+  end
+
   def test_page
     assert_equal User.offset(Yap::DEFAULTS.per_page).first, User.paginate(page: 2).first
   end
