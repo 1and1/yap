@@ -36,7 +36,7 @@ module Yap
   module ClassMethods
     def last_page(params)
       per_page = extract_number(params[:per_page], DEFAULTS.per_page)
-      (count / per_page.to_f).ceil
+      (filter(params[:filter]).count / per_page.to_f).ceil
     end
   end
 
