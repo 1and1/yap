@@ -1,3 +1,4 @@
+require 'active_record'
 require 'yap'
 
 class User < ActiveRecord::Base

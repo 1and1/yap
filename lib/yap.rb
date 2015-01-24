@@ -50,8 +50,8 @@ module Yap
     # @param [Hash] The parameters used for pagination (:page, :per_page, :sort, :direction)
     #
     scope :paginate, -> (params = {}) {
-      page, per_page, column, direction = extract_pagination_params(params)
-      filter(params[:filter]).limit(per_page).offset((page-1)*per_page).order("#{column} #{direction}")
+      page, per_page, order_by = extract_pagination_params(params)
+      filter(params[:filter]).limit(per_page).offset((page-1)*per_page).order(order_by)
     }
 
     private
@@ -62,7 +62,7 @@ module Yap
       sort = extract_column(params[:sort])
       direction = extract_direction(params[:direction])
 
-      return page, per_page, sort, direction
+      return page, per_page, (sort =~ /\./ ? "#{sort} #{direction}" : { sort => direction })
     end
 
     def self.extract_number(number, default)
