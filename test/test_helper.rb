@@ -9,7 +9,7 @@ ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':me
 require './db/schema'
 require './db/models'
 
-ActiveSupport.test_order = :random
+ActiveSupport.test_order = :random if ActiveSupport.respond_to? :test_order=
 
 Team.create!(name: 'Operator')
 Team.create!(name: 'Moderator')

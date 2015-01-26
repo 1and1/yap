@@ -26,7 +26,7 @@ module Yap
   include Filterable
 
   DEFAULTS = Struct.new(:page, :per_page, :sort, :direction, :disable_warnings)
-                 .new(1, 10, 'id', 'ASC', false)
+                 .new(1, 10, :id, :asc, false)
 
   def self.configure
     raise ArgumentError, 'No block given.' unless block_given?
@@ -86,8 +86,8 @@ module Yap
 
     def self.extract_direction(direction)
       direction ||= DEFAULTS.direction
-      dir = (direction).to_s.upcase
-      raise PaginationError.new("'#{direction}' is not a valid direction. Use 'asc' or 'desc'.") unless %w[ASC DESC].include? dir
+      dir = (direction).to_sym.downcase
+      raise PaginationError.new("'#{direction}' is not a valid direction. Use 'asc' or 'desc'.") unless [:asc, :desc].include? dir
       dir
     end
   end

@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'yap'
-  s.version     = '0.3.2'
-  s.date        = '2015-01-24'
+  s.version     = '0.3.3'
+  s.date        = '2015-01-26'
   s.summary     = 'Yet another paginator for Ruby on Rails'
   s.description = 'Yet another paginator for Ruby on Rails adding a pagination and filtering interface to ActiveRecords.'
   s.authors     = ['Finn Glöe']
@@ -12,6 +12,6 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 2.1.0'
   
-  s.add_runtime_dependency 'activerecord', '~> 4.1'
+  s.add_runtime_dependency 'activerecord', '~> 4.1.0'
   s.add_development_dependency 'sqlite3', '~> 1.3'
 end
