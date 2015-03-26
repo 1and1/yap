@@ -51,8 +51,9 @@ Assuming you included `Yap` into `User`, you can now do something like this:
         direction:  'ASC'
     )                                   # => Invocation with custom options.
 
-    User.last_page                      # => Last page as a number for defaults
-    User.last_page(params)              # => Last page for given params. Works the same way as paginate.
+    User.last_page                      # => Last page as a number for the previous paginated query
+
+    User.range                          # => E.g. { from: 1, to: 10, total: 100 }
 
     User.filter('gender' => 'f')        # => All female users
     User.filter(
@@ -126,3 +127,12 @@ If an option cannot be parsed it will raise `Yap::PaginationError` or `Yap::Filt
 * Methods for generating next, previous and last page links
 * Maximum for per_page
 * Rescue from sql errors
+
+## Changelog
+
+### 1.0.0
+
+* changed `last_page` to base on the actual query not only the parameters
+    * this now produces correct results if there are custom `where` conditions
+* added `range` attribute which can be used like `last_page`
+    * provides a hash containing the limits of the latest queried page

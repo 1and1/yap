@@ -150,11 +150,39 @@ class TestYap < ActiveSupport::TestCase
   end
 
   def test_last_page
-    params = { per_page: 3 }
-    # last page should have 3 or less users
-    assert User.paginate(params.merge(page: User.last_page(params))).size <= params[:per_page]
+    params = { per_page: 4 }
+
+    # ensure last_page exists
+    User.paginate(params)
+    last = User.last_page
+
+    # last page should have less than 3 users
+    assert User.paginate(params.merge(page: last)).size < params[:per_page]
 
     # the page beyond last page should be empty
-    assert_empty User.paginate(params.merge(page: User.last_page(params)+1))
+    assert_empty User.paginate(params.merge(page: last+1))
+  end
+
+  def test_range
+    params = {
+        page: 3,
+        per_page: 3,
+        filter: {
+          gender: 'm'
+        }
+    }
+    User.paginate(params)
+    range = User.range
+    total = User.where(gender: 'm').count
+    assert_equal total, range[:total]
+
+    # range must not exceed per_page
+    assert range[:to]-range[:from] <=  params[:per_page]
+
+    # :from must be first of :page
+    assert_equal 7, range[:from]
+
+    # :to must be either :total or last of :page
+    assert_includes [9, total], range[:to]
   end
 end

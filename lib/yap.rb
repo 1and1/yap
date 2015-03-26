@@ -34,9 +34,22 @@ module Yap
   end
 
   module ClassMethods
-    def last_page(params)
-      per_page = extract_number(params[:per_page], DEFAULTS.per_page)
-      (filter(params[:filter]).count / per_page.to_f).ceil
+    attr_reader :last_page, :range
+
+    def calc_last_page(per_page)
+      (@total / per_page.to_f).ceil
+    end
+
+    def calc_range(page, per_page)
+      from = (page-1)*per_page+1
+      to = page*per_page
+      to = @total if @total < to
+
+      {
+          from: from,
+          to: to,
+          total: @total
+      }
     end
   end
 
@@ -51,6 +64,9 @@ module Yap
     #
     scope :paginate, -> (params = {}) {
       page, per_page, order_by = extract_pagination_params(params)
+      @total = filter(params[:filter]).count
+      @range = calc_range(page, per_page)
+      @last_page = calc_last_page(per_page)
       filter(params[:filter]).limit(per_page).offset((page-1)*per_page).order(order_by)
     }
 
