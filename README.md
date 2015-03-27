@@ -74,6 +74,10 @@ Assuming you included `Yap` into `User`, you can now do something like this:
 Yap will convert strings to symbols or numbers and vice versa where necessary. This make the last one a really powerful
 method of offering the pagination API directly to the user.
 
+### Chaining
+
+The `paginate` scope can be chained with other `ActiveRecord` methods like `joins`, `where` etc..
+
 ### Advanced
 
 The "team" alias defined in the column map above allows us to sort the results by the name of the team a user belongs
@@ -124,9 +128,8 @@ If an option cannot be parsed it will raise `Yap::PaginationError` or `Yap::Filt
 
 ## ToDos
 
-* Methods for generating next, previous and last page links
 * Maximum for per_page
-* Rescue from sql errors
+* Make gathering total/range optional
 
 ## Changelog
 
