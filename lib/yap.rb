@@ -26,8 +26,8 @@ module Yap
   extend ActiveSupport::Concern
   include Filterable
 
-  DEFAULTS = Struct.new(:page, :per_page, :sort, :direction, :disable_warnings)
-                 .new(1, 10, :id, :asc, false)
+  DEFAULTS = Struct.new(:page, :per_page, :hard_limit, :sort, :direction, :disable_warnings)
+                 .new(1, 10, nil, :id, :asc, false)
 
   def self.configure
     raise ArgumentError, 'No block given.' unless block_given?
@@ -52,6 +52,9 @@ module Yap
     def self.extract_pagination_params(params)
       page = extract_number(params[:page], DEFAULTS.page)
       per_page = extract_number(params[:per_page], DEFAULTS.per_page)
+      if DEFAULTS.hard_limit && per_page > DEFAULTS.hard_limit
+        raise PaginationError.new("Not more than #{DEFAULTS.hard_limit} items per page accepted.")
+      end
       sort = extract_column(params[:sort])
       direction = extract_direction(params[:direction])
 

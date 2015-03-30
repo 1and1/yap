@@ -21,7 +21,7 @@ class TestYap < ActiveSupport::TestCase
       d.direction = :desc
     end
 
-    assert_nothing_raised Yap::PaginationError do
+    assert_nothing_raised do
       User.paginate
     end
 
@@ -139,6 +139,28 @@ class TestYap < ActiveSupport::TestCase
 
   def test_empty_page
     assert_empty User.paginate(page: 2, per_page: 1000)
+  end
+
+  def test_hard_limit
+    Yap.configure do |d|
+      d.hard_limit = 10
+    end
+
+    assert_raises Yap::PaginationError do
+      User.paginate(per_page: 11)
+    end
+    assert_raises Yap::PaginationError do
+      User.paginate(per_page: 100)
+    end
+
+    assert_nothing_raised do
+      User.paginate(per_page: 10)
+    end
+    assert_nothing_raised do
+      User.paginate(per_page: 1)
+    end
+
+    restore_defaults
   end
 
   def test_chaining
