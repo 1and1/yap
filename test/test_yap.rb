@@ -153,8 +153,7 @@ class TestYap < ActiveSupport::TestCase
     params = { per_page: 4 }
 
     # ensure last_page exists
-    User.paginate(params)
-    last = User.last_page
+    last = User.paginate(params).last_page
 
     # last page should have less than 3 users
     assert User.paginate(params.merge(page: last)).size < params[:per_page]
@@ -171,9 +170,9 @@ class TestYap < ActiveSupport::TestCase
           gender: 'm'
         }
     }
-    User.paginate(params)
-    range = User.range
-    total = User.where(gender: 'm').count
+
+    range = User.paginate(params).range
+    total = User.where(params[:filter]).count
     assert_equal total, range[:total]
 
     # range must not exceed per_page

@@ -1,7 +1,8 @@
 require 'active_support/concern'
-require 'yap/exceptions'
+require 'yap/active_record/relation'
 require 'yap/column_mapper'
 require 'yap/filterable'
+require 'yap/exceptions'
 
 ##
 # Support for Active Record pagination. All options can be safely accessed by the user through url query parameters. To
@@ -33,28 +34,7 @@ module Yap
     yield(DEFAULTS)
   end
 
-  module ClassMethods
-    attr_reader :last_page, :range
-
-    def calc_last_page(per_page)
-      (@total / per_page.to_f).ceil
-    end
-
-    def calc_range(page, per_page)
-      from = (page-1)*per_page+1
-      to = page*per_page
-      to = @total if @total < to
-
-      {
-          from: from,
-          to: to,
-          total: @total
-      }
-    end
-  end
-
   included do
-    extend ClassMethods
     extend ColumnMapper
 
     ##
@@ -64,9 +44,6 @@ module Yap
     #
     scope :paginate, -> (params = {}) {
       page, per_page, order_by = extract_pagination_params(params)
-      @total = filter(params[:filter]).count
-      @range = calc_range(page, per_page)
-      @last_page = calc_last_page(per_page)
       filter(params[:filter]).limit(per_page).offset((page-1)*per_page).order(order_by)
     }
 
