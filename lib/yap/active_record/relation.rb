@@ -13,7 +13,9 @@ module ActiveRecord
     end
 
     def last_page
-      (total / limit_value.to_f).ceil
+      page = (total / limit_value.to_f).ceil
+
+      page == 0 ? 1 : page
     end
 
     def range
