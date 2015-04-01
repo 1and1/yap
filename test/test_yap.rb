@@ -186,24 +186,21 @@ class TestYap < ActiveSupport::TestCase
 
   def test_range
     params = {
-        page: 3,
+        page: 2,
         per_page: 3,
         filter: {
-          gender: 'm'
+          gender: 'f'
         }
     }
 
-    range = User.paginate(params).range
+    pp range = User.paginate(params).range
     total = User.where(params[:filter]).count
     assert_equal total, range[:total]
 
-    # range must not exceed per_page
-    assert range[:to]-range[:from] <=  params[:per_page]
-
     # :from must be first of :page
-    assert_equal 7, range[:from]
+    assert_equal 4, range[:from]
 
     # :to must be either :total or last of :page
-    assert_includes [9, total], range[:to]
+    assert_equal 6, range[:to]
   end
 end

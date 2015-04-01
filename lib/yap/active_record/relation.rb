@@ -20,7 +20,7 @@ module ActiveRecord
 
     def range
       from = offset_value+1
-      to = from+limit_value
+      to = from+limit_value-1
       to = total if total < to
 
       {
