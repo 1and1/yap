@@ -1,6 +1,6 @@
 module ActiveRecord
   class Relation
-    def without_limit
+    def without_pagination
       rel = dup
       rel.limit! nil
       rel.offset! nil
@@ -9,7 +9,7 @@ module ActiveRecord
     end
 
     def total
-      @total ||= without_limit { |rel| rel.count }
+      @total ||= without_pagination { |rel| rel.count }
     end
 
     def last_page

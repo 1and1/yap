@@ -43,33 +43,56 @@ internal naming from users and to make sorting by associations possible (more on
 
 Assuming you included `Yap` into `User`, you can now do something like this:
 
-    User.paginate                       # => Page 1 with default order and size
+    User.paginate
+    # => Page 1 with default order and size
+
     User.paginate(
         page:       1,
         per_page:   10,
         sort:       'id',
         direction:  'ASC'
-    )                                   # => Invocation with custom options.
+    )
+    # => Invocation with custom options.
 
-    User.paginate(params).last_page     # => Last page as a number for the previous paginated query
+    User.paginate(params).last_page
+    # => Last page as a number for the previously paginated query
+    User.paginate(params).range
+    # => E.g. { from: 1, to: 10, total: 100 }
+    User.paginate(params).total
+    # => total number of results for this filters
 
-    User.paginate(params).range         # => E.g. { from: 1, to: 10, total: 100 }
+    User.paginate(params).without_pagination do |rel|
+      # access rel without limit and offset; filters still apply
+      rel.count
+    end
+    # => total number of results
 
-    User.filter('gender' => 'f')        # => All female users
+    User.filter('gender' => 'f')
+    # => All female users
+
     User.filter(
         'team_id' => '1,2',
         'gender' => 'm'
-    )                                   # => All males of teams 1 and 2
+    )
+    # => All males of teams 1 and 2
+
     User.filter(
-        'date_of_birth' => '1990-01-01..1991-01-01'
-    )                                   # => All users born in 1990
-    User.filter('team_id' => '!null')   # => All users with any team
+        # Note that '0...3' means [0,1,2] while '0..3' means [0,1,2,3]
+        'date_of_birth' => '1990-01-01...1991-01-01'
+    )
+    # => All users born in 1990
+
+    User.filter('team_id' => '!null')
+    # => All users with any team
+
     User.paginate(
         page:   1,
         filter: { 'team' => 'null' }
-    )                                   # => Combining filter and pagination
+    )
+    # => Combining filter and pagination
 
-    User.paginate(params)               # => Passing parameters in controller (http://localhost/users?filter[gender]=f)
+    User.paginate(params)
+    # => Passing parameters in controller (http://localhost/users?filter[gender]=f)
 
 Yap will convert strings to symbols or numbers and vice versa where necessary. This make the last one a really powerful
 method of offering the pagination API directly to the user.
@@ -128,7 +151,6 @@ If an option cannot be parsed it will raise `Yap::PaginationError` or `Yap::Filt
 
 ## ToDos
 
-* Maximum for per_page
 * Make gathering total/range optional
 
 ## Changelog
@@ -137,7 +159,7 @@ If an option cannot be parsed it will raise `Yap::PaginationError` or `Yap::Filt
 
 * changed `last_page` to base on the actual query not only the parameters
     * this now produces correct results if there are custom `where` conditions
-* added `range` attribute which can be used like `last_page`
+* added `range` method which can be used like `last_page`
     * provides a hash containing the limits of the latest queried page
-* added `without_limit`
-* added `total`
+* added `total` method to get the total number of results
+* added `without_pagination` which takes a block an serves an `Activerecord::Relation` which is not paginated
