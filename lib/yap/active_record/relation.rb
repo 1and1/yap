@@ -35,20 +35,21 @@ module ActiveRecord
     end
 
     ##
-    # Returns a hash defining a range with :from, :to and :total values.
+    # Returns a hash defining a range with :from, :to and optionally :total. Note that querying the total count requires
+    # an extra query to be executed.
     #
+    # @param [Boolean] include_total Include total value
     # @return [Hash] Values defining the range of the current page.
     #
-    def range
+    def range(include_total = false)
       from = offset_value+1
       to = offset_value+limit_value
-      to = total if total < to
+      to = total if total < to && include_total
 
-      {
-          from: from,
-          to: to,
-          total: total
-      }
+      range = { from: from, to: to }
+      return range unless include_total
+
+      range.merge(total: total)
     end
   end
 end

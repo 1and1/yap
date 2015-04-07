@@ -193,7 +193,7 @@ class TestYap < ActiveSupport::TestCase
         }
     }
 
-    pp range = User.paginate(params).range
+    range = User.paginate(params).range(true)
     total = User.where(params[:filter]).count
     assert_equal total, range[:total]
 
@@ -202,5 +202,9 @@ class TestYap < ActiveSupport::TestCase
 
     # :to must be either :total or last of :page
     assert_equal 6, range[:to]
+  end
+
+  def test_range_no_total
+    assert_not User.paginate.range.key? :total
   end
 end

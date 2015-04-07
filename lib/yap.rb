@@ -40,7 +40,7 @@ module Yap
     ##
     # The paginate scope takes a hash as parameter. All options are optional and can be combined arbitrarily.
     #
-    # @param [Hash] The parameters used for pagination (:page, :per_page, :sort, :direction)
+    # @param [Hash] params The parameters used for pagination (:page, :per_page, :sort, :direction)
     #
     scope :paginate, -> (params = {}) {
       page, per_page, order_by = extract_pagination_params(params)

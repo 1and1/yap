@@ -155,7 +155,12 @@ If an option cannot be parsed it will raise `Yap::PaginationError` or `Yap::Filt
 
 ## Changelog
 
-### 1.0.0
+### 1.1
+
+* changed default behavior for `range` to not include `total`; saves time when using `range`
+  * call `range(true)` to include total value
+
+### 1.0
 
 * changed `last_page` to base on the actual query not only the parameters
     * this now produces correct results if there are custom `where` conditions
