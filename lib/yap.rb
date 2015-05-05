@@ -55,10 +55,9 @@ module Yap
       if DEFAULTS.hard_limit && per_page > DEFAULTS.hard_limit
         raise PaginationError.new("Not more than #{DEFAULTS.hard_limit} items per page accepted.")
       end
-      sort = extract_column(params[:sort])
-      direction = extract_direction(params[:direction])
+      sort = extract_sort(params[:sort], params[:direction])
 
-      return page, per_page, (sort =~ /\./ ? "#{sort} #{direction}" : { sort => direction })
+      return page, per_page, sort
     end
 
     def self.extract_number(number, default)
@@ -71,6 +70,13 @@ module Yap
 
       raise PaginationError.new('Only positive numbers are accepted.') unless number > 0
       number
+    end
+
+    def self.extract_sort(sort, direction)
+      sort = extract_column(sort)
+      direction = extract_direction(direction)
+
+      (sort =~ /\./ ? "#{sort} #{direction}" : { sort => direction })
     end
 
     def self.extract_column(sort)
