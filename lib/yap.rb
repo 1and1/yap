@@ -55,7 +55,7 @@ module Yap
       if DEFAULTS.hard_limit && per_page > DEFAULTS.hard_limit
         raise PaginationError.new("Not more than #{DEFAULTS.hard_limit} items per page accepted.")
       end
-      sort = extract_sort(params[:sort], params[:direction])
+      sort = extract_order(params[:sort], params[:direction])
 
       return page, per_page, sort
     end
@@ -72,12 +72,34 @@ module Yap
       number
     end
 
-    def self.extract_sort(sort, direction)
+    def self.extract_order(sort, direction)
+      sort = sort.split(',') if sort.is_a?(String) && sort =~ /,/
+      direction = direction.split(',') if direction.is_a?(String) && direction =~ /,/
+
+      case sort
+      when Array
+        order = []
+        sort.each_with_index do |s, i|
+          order << build_order_by(s, direction[i] || DEFAULTS.direction)
+        end
+
+        order
+      when Hash
+        sort.map do |s, d|
+          build_order_by(s, d)
+        end
+      else
+        build_order_by sort, direction
+      end
+    end
+
+    def self.build_order_by(sort, direction)
       sort = extract_column(sort)
       direction = extract_direction(direction)
 
       (sort =~ /\./ ? "#{sort} #{direction}" : { sort => direction })
     end
+    private_class_method :build_order_by
 
     def self.extract_column(sort)
       sort ||= DEFAULTS.sort

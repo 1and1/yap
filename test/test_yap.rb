@@ -207,4 +207,75 @@ class TestYap < ActiveSupport::TestCase
   def test_range_no_total
     assert_not User.paginate.range.key? :total
   end
+
+  def test_sort_by_csl_of_columns
+    sort = {
+        team: :desc,
+        date_of_birth: :asc
+    }
+    params = {
+        sort: sort.keys.join(','),
+        direction: sort.values.join(','),
+        per_page: 100
+    }
+
+    users = User.joins(:team).paginate(params)
+    assert_sorted_by_team_and_name users
+  end
+
+  def test_sort_by_array_of_columns
+    sort = {
+        team: :desc,
+        date_of_birth: :asc
+    }
+    params = {
+        sort: sort.keys,
+        direction: sort.values,
+        per_page: 100
+    }
+
+    users = User.joins(:team).paginate(params)
+    assert_sorted_by_team_and_name users
+  end
+
+  def test_sort_by_array_missing_direction
+    sort = {
+        team: :desc,
+        date_of_birth: :asc
+    }
+    params = {
+        sort: sort.keys,
+        direction: sort.values.first(1),
+        per_page: 100
+    }
+
+    users = User.joins(:team).paginate(params)
+    assert_sorted_by_team_and_name users
+  end
+
+  def test_sort_by_hash
+    sort = {
+        team: :desc,
+        date_of_birth: :asc
+    }
+    params = {
+        sort: sort,
+        per_page: 100
+    }
+
+    users = User.joins(:team).paginate(params)
+    assert_sorted_by_team_and_name users
+  end
+
+  def assert_sorted_by_team_and_name(user)
+    assert_not_empty user
+
+    assert_equal user.map { |u| u.team.name }, user.map { |u| u.team.name }.sort.reverse
+
+    user.map { |u| u.team.name }.uniq.each do |f|
+      filtered = user.select { |u| u.team.name == f }
+      assert_equal filtered.map(&:date_of_birth), filtered.map(&:date_of_birth).sort
+    end
+  end
+  private :assert_sorted_by_team_and_name
 end
