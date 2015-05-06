@@ -79,6 +79,7 @@ module Yap
       case sort
       when Array
         order = []
+        direction = Array.wrap direction
         sort.each_with_index do |s, i|
           order << build_order_by(s, direction[i] || DEFAULTS.direction)
         end

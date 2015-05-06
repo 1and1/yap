@@ -223,7 +223,7 @@ class TestYap < ActiveSupport::TestCase
     assert_sorted_by_team_and_name users
   end
 
-  def test_sort_by_array_of_columns
+  def test_sort_by_array
     sort = {
         team: :desc,
         date_of_birth: :asc
@@ -238,7 +238,7 @@ class TestYap < ActiveSupport::TestCase
     assert_sorted_by_team_and_name users
   end
 
-  def test_sort_by_array_missing_direction
+  def test_sort_by_array_missing_a_direction
     sort = {
         team: :desc,
         date_of_birth: :asc
@@ -251,6 +251,17 @@ class TestYap < ActiveSupport::TestCase
 
     users = User.joins(:team).paginate(params)
     assert_sorted_by_team_and_name users
+  end
+
+  def test_sort_by_array_missing_all_directions
+    params = {
+        sort: [:team, :date_of_birth],
+        per_page: 100
+    }
+
+    users = User.joins(:team).paginate(params)
+    assert_not_empty users
+    assert_equal users.map { |u| u.team.name }, users.map { |u| u.team.name }.sort
   end
 
   def test_sort_by_hash
@@ -267,13 +278,13 @@ class TestYap < ActiveSupport::TestCase
     assert_sorted_by_team_and_name users
   end
 
-  def assert_sorted_by_team_and_name(user)
-    assert_not_empty user
+  def assert_sorted_by_team_and_name(users)
+    assert_not_empty users
 
-    assert_equal user.map { |u| u.team.name }, user.map { |u| u.team.name }.sort.reverse
+    assert_equal users.map { |u| u.team.name }, users.map { |u| u.team.name }.sort.reverse
 
-    user.map { |u| u.team.name }.uniq.each do |f|
-      filtered = user.select { |u| u.team.name == f }
+    users.map { |u| u.team.name }.uniq.each do |f|
+      filtered = users.select { |u| u.team.name == f }
       assert_equal filtered.map(&:date_of_birth), filtered.map(&:date_of_birth).sort
     end
   end
