@@ -67,6 +67,17 @@ Assuming you included `Yap` into `User`, you can now do something like this:
     end
     # => total number of results
 
+    User.paginate(
+      sort: {
+        'gender'        => 'desc',
+        'date_of_birth' => 'asc'
+      }
+    )
+    # => Sort by gender and date_of_birth (method 1)
+
+    User.paginate(sort: 'gender,date_of_birth', direction: 'desc,asc')
+    # => Sort by gender and date_of_birth (method 2)
+
     User.filter('gender' => 'f')
     # => All female users
 
@@ -149,11 +160,14 @@ If an option cannot be parsed it will raise `Yap::PaginationError` or `Yap::Filt
       end
     end
 
-## ToDos
-
-* Make gathering total/range optional
-
 ## Changelog
+
+### 1.2
+
+* added sorting by multiple elements
+  * method 1: ?sort[team]=desc&sort[date_of_birth]=asc
+  * method 2: ?sort=team,date_of_birth&direction=desc,asc
+    * missing directions will fall back to default
 
 ### 1.1
 
