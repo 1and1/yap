@@ -21,13 +21,13 @@ module Yap
         when /(.+)\.{2}(.+)/
           value = $1..$2
         else
+          # Convert null to ruby nil to use 'IS NULL' in SQL.
           value = value.downcase == 'null' ? nil : value
         end
 
         # Ensure filter contains an array to append to.
         self[match][column] ||= []
 
-        # Convert null to ruby nil to use 'IS NULL' in SQL.
         self[match][column] << value
       end
     end
