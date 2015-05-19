@@ -3,7 +3,7 @@ require_relative 'lib/yap/version'
 Gem::Specification.new do |s|
   s.name        = 'yap'
   s.version     = Yap::VERSION
-  s.date        = '2015-04-07'
+  s.date        = Date.today
   s.summary     = 'Yet another paginator for Ruby on Rails'
   s.description = 'Yet another paginator for Ruby on Rails adding a pagination and filtering interface to ActiveRecords.'
   s.authors     = ['Finn Glöe']
