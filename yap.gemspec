@@ -6,10 +6,10 @@ Gem::Specification.new do |s|
   s.date        = Date.today
   s.summary     = 'Yet another paginator for Ruby on Rails'
   s.description = 'Yet another paginator for Ruby on Rails adding a pagination and filtering interface to ActiveRecords.'
-  s.authors     = ['Finn Glöe']
+  s.author      = 'Finn Glöe'
   s.email       = 'finn.gloee@1und1.de'
   s.files       = Dir.glob('lib/**/*') + %w(LICENSE README.md)
-  s.homepage    = 'http://rubygems.org/gems/yap'
+  s.homepage    = 'https://github.com/1and1/yap'
   s.license     = 'GPL v2'
 
   s.required_ruby_version = '~> 2.0'
