@@ -34,6 +34,10 @@ module Yap
     yield(DEFAULTS)
   end
 
+  def self.configuration
+    DEFAULTS.dup
+  end
+
   included do
     extend ColumnMapper
 
