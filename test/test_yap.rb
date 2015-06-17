@@ -5,6 +5,22 @@ class TestYap < ActiveSupport::TestCase
     @saved_defaults = Yap::DEFAULTS.dup
   end
 
+  def test_configuration
+    Yap.configure do |d|
+      d.page = 2
+      d.per_page = 7
+      d.sort = :name
+    end
+
+    conf = Yap.configuration
+
+    assert_equal 2, conf.page
+    assert_equal 7, conf.per_page
+    assert_equal :name, conf.sort
+
+    restore_defaults
+  end
+
   def test_default_parameters
     page = User.paginate
 
