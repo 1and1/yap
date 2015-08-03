@@ -69,6 +69,38 @@ class FilterableTest < ActiveSupport::TestCase
   end
   private :to_api_date
 
+  def test_greater_match
+    users = User.filter({ id: '>10' })
+    assert_equal User.where('id > 10').size, users.size
+    users.each do |user|
+      assert user.id > 10
+    end
+  end
+
+  def test_less_match
+    users = User.filter({ id: '<10' })
+    assert_equal User.where('id < 10').size, users.size
+    users.each do |user|
+      assert user.id < 10
+    end
+  end
+
+  def test_greater_or_equal_match
+    users = User.filter({ id: '>=10' })
+    assert_equal User.where('id >= 10').size, users.size
+    users.each do |user|
+      assert user.id >= 10
+    end
+  end
+
+  def test_less_or_equal_match
+    users = User.filter({ id: '<=10' })
+    assert_equal User.where('id <= 10').size, users.size
+    users.each do |user|
+      assert user.id <= 10
+    end
+  end
+
   def test_incorrect_parameters
     ex = assert_raises Yap::FilterError do
       User.filter(not_a_column: 'null')

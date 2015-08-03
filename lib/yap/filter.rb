@@ -16,6 +16,8 @@ module Yap
         end
 
         case value
+        when /([<>]=?)(.+)/
+          match, value = handle_comparison_operators(match, column, $1.to_sym, $2)
         when /(.+)\.{3}(.+)/
           value = $1...$2
         when /(.+)\.{2}(.+)/
@@ -30,6 +32,23 @@ module Yap
 
         self[match][column] << value
       end
+    end
+
+    def handle_comparison_operators(match, column, operator, value)
+      case operator
+      when :<
+        handle_comparison_operators(toggle_match(match), column, :>=, value)
+      when :>
+        handle_comparison_operators(toggle_match(match), column, :<=, value)
+      when :<=
+        return match, -Float::INFINITY..value.to_f
+      when :>=
+        return match, value.to_f..Float::INFINITY
+      end
+    end
+
+    def toggle_match(match)
+      match == :where ? :not : :where
     end
   end
 end
