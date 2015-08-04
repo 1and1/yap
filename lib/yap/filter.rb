@@ -34,7 +34,12 @@ module Yap
       end
     end
 
+    private
+
     def handle_comparison_operators(match, column, operator, value)
+      # TODO make comparison operators work for String. See here: http://c4se.hatenablog.com/entry/2013/10/01/010305
+      value = Float(value) rescue raise(Yap::FilterError, 'You can only use float values with comparison operators <, >, <= and >=.')
+
       case operator
       when :<
         handle_comparison_operators(toggle_match(match), column, :>=, value)

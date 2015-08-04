@@ -101,6 +101,13 @@ class FilterableTest < ActiveSupport::TestCase
     end
   end
 
+  def test_comparison_with_date_should_fail
+    ex = assert_raises Yap::FilterError do
+      User.filter({ date_of_birth: "<=#{to_api_date(Date.today)}" })
+    end
+    assert_match 'float value', ex.message
+  end
+
   def test_incorrect_parameters
     ex = assert_raises Yap::FilterError do
       User.filter(not_a_column: 'null')
