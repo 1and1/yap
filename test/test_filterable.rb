@@ -101,6 +101,14 @@ class FilterableTest < ActiveSupport::TestCase
     end
   end
 
+  def test_not_with_comparison_operator
+    users = User.filter({ id: '!<=10' })
+    assert_equal User.where.not('id <= 10').size, users.size
+    users.each do |user|
+      assert_not user.id <= 10
+    end
+  end
+
   def test_comparison_with_date_should_fail
     ex = assert_raises Yap::FilterError do
       User.filter({ date_of_birth: "<=#{to_api_date(Date.today)}" })
