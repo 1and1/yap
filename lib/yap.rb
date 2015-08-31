@@ -3,6 +3,7 @@ require 'yap/active_record/relation'
 require 'yap/column_mapper'
 require 'yap/filterable'
 require 'yap/exceptions'
+require 'string_infinity'
 
 ##
 # Support for Active Record pagination. All options can be safely accessed by the user through url query parameters. To

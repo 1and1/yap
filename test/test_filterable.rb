@@ -109,11 +109,22 @@ class FilterableTest < ActiveSupport::TestCase
     end
   end
 
-  def test_comparison_with_date_should_fail
-    ex = assert_raises Yap::FilterError do
-      User.filter({ date_of_birth: "<=#{to_api_date(Date.today)}" })
+  def test_less_or_equal_with_date
+    date = User.first.date_of_birth
+    users = User.filter({ date_of_birth: "<=#{to_api_date(date)}" })
+    assert_equal User.where("date_of_birth <= ?", to_api_date(date)).size, users.size
+    users.each do |user|
+      assert user.date_of_birth <= date
     end
-    assert_match 'float value', ex.message
+  end
+
+  def test_greater_with_string
+    name = User.first.name
+    users = User.filter({ name: "<=#{name}" })
+    assert_equal User.where("name <= ?", name).size, users.size
+    users.each do |user|
+      assert user.name <= name
+    end
   end
 
   def test_incorrect_parameters

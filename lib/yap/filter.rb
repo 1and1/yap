@@ -1,3 +1,5 @@
+require 'yap/extended_range'
+
 module Yap
   class Filter < Hash
     def initialize
@@ -37,18 +39,15 @@ module Yap
     private
 
     def handle_comparison_operators(match, column, operator, value)
-      # TODO make comparison operators work for String. See here: http://c4se.hatenablog.com/entry/2013/10/01/010305
-      value = Float(value) rescue raise(Yap::FilterError, 'You can only use float values with comparison operators <, >, <= and >=.')
-
       case operator
       when :<
         handle_comparison_operators(toggle_match(match), column, :>=, value)
       when :>
         handle_comparison_operators(toggle_match(match), column, :<=, value)
       when :<=
-        return match, -Float::INFINITY..value.to_f
+        return match, ExtendedRange.new(-String::INFINITY, value)
       when :>=
-        return match, value.to_f..Float::INFINITY
+        return match, ExtendedRange.new(value, String::INFINITY)
       end
     end
 
