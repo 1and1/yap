@@ -173,7 +173,7 @@ If an option cannot be parsed it will raise `Yap::PaginationError` or `Yap::Filt
     * will give you any element with and id equal to or greater 100
   * you can even combine multiple filters: ?filter[id]=>=100,<200
     * although the same result can be achieved through ?filter[id]=100...200
-* ~~_currently, there is not support for strings and dates. This will be implemented in the future_~~ (see version 1.4)
+* ~~_currently, there is no support for strings and dates. This will be implemented in the future._~~ (see version 1.4)
 
 ### 1.2
 
