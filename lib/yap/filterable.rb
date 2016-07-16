@@ -32,7 +32,7 @@ module Yap
       #
       # @param [Hash] Attribute/value pairs to filter ( { 'gender' => 'f' } )
       #
-      scope :filter, -> (params = nil) {
+      scope :filter, ->(params = nil) {
         if params.blank?
           all
         else
