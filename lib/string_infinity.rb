@@ -3,8 +3,8 @@ class StringInfinity < String
     String::INFINITY_NEGATIVE
   end
 
-  def ==(value)
-    self.class == value.class
+  def ==(other)
+    self.class == other.class
   end
 end
 

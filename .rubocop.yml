@@ -1,8 +1,7 @@
-inherit_from: .rubocop_todo.yml
-
 AllCops:
   TargetRubyVersion: 2.3
   Exclude:
+    - db/schema.rb
     - test/*
 
 Style/FrozenStringLiteralComment:
@@ -19,3 +18,15 @@ Style/CaseIndentation:
 
 Style/PerlBackrefs:
   Enabled: false
+
+Style/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/Documentation:
+  Exclude:
+    - 'db/models.rb'
+    - 'lib/string_infinity.rb'
+    - 'lib/yap/active_record/relation.rb'
+    - 'lib/yap/column_mapper.rb'
+    - 'lib/yap/filter.rb'
+    - 'lib/yap/filterable.rb'

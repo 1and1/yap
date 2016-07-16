@@ -28,7 +28,7 @@ module Yap
   include Filterable
 
   DEFAULTS = Struct.new(:page, :per_page, :hard_limit, :sort, :direction, :disable_warnings)
-                 .new(1, 10, nil, :id, :asc, false)
+    .new(1, 10, nil, :id, :asc, false)
 
   def self.configure
     raise ArgumentError, 'No block given.' unless block_given?
@@ -45,11 +45,11 @@ module Yap
     ##
     # The paginate scope takes a hash as parameter. All options are optional and can be combined arbitrarily.
     #
-    # @param [Hash] params The parameters used for pagination (:page, :per_page, :sort, :direction)
+    # @param [Hash] params The parameters used for pagination (:page, :per_page, :sort, :direction, :filter)
     #
-    scope :paginate, ->(params = {}) {
+    scope :paginate, lambda { |params = {}|
       page, per_page, order_by = extract_pagination_params(params)
-      filter(params[:filter]).limit(per_page).offset((page-1)*per_page).order(order_by)
+      filter(params[:filter]).limit(per_page).offset((page - 1) * per_page).order(order_by)
     }
   end
 end

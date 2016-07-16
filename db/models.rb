@@ -6,12 +6,13 @@ class User < ActiveRecord::Base
   belongs_to :team
 
   COLUMN_MAP = {
-      'team' => 'teams.name',
-      'birthday' => 'date_of_birth',
-      'sex' => 'gender'
-  }
+    'team' => 'teams.name',
+    'birthday' => 'date_of_birth',
+    'sex' => 'gender'
+  }.freeze
+
   def self.map_name_to_column(name)
-    return COLUMN_MAP[name]
+    COLUMN_MAP[name]
   end
 end
 

@@ -20,7 +20,7 @@ module ActiveRecord
     # @return [Integer] Total number of results
     #
     def total
-      @total ||= without_pagination { |rel| rel.count }
+      @total ||= without_pagination(&:count)
     end
 
     ##
@@ -42,8 +42,8 @@ module ActiveRecord
     # @return [Hash] Values defining the range of the current page.
     #
     def range(include_total = false)
-      from = offset_value+1
-      to = offset_value+limit_value
+      from = offset_value + 1
+      to = offset_value + limit_value
       to = total if total < to && include_total
 
       range = { from: from, to: to }
