@@ -41,8 +41,6 @@ module Yap
         end
       }
 
-      private
-
       def self.extract_filter_params(params)
         filter = Filter.new
 

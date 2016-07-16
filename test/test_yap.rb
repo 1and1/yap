@@ -83,7 +83,7 @@ class TestYap < ActiveSupport::TestCase
   end
 
   def restore_defaults
-    Yap::DEFAULTS.each_with_index do |d, i|
+    Yap::DEFAULTS.each_with_index do |_, i|
       Yap::DEFAULTS[i] = @saved_defaults[i]
     end
   end

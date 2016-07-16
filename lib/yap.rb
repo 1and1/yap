@@ -52,8 +52,6 @@ module Yap
       filter(params[:filter]).limit(per_page).offset((page-1)*per_page).order(order_by)
     }
 
-    private
-
     def self.extract_pagination_params(params)
       page = extract_number(params[:page], DEFAULTS.page)
       per_page = extract_number(params[:per_page], DEFAULTS.per_page)
