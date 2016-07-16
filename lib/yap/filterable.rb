@@ -37,24 +37,13 @@ module Yap
           all
         else
           filter = extract_filter_params(params)
-          where(filter[:where]).where.not(filter[:not])
+          where(filter.where).where.not(filter.not)
         end
       }
 
       def self.extract_filter_params(params)
         filter = Filter.new
-
-        failed = []
-        params.each do |key, values|
-          column = map_column(key.to_s.downcase)
-          if column
-            filter.parse!(column, values)
-          else
-            failed << key
-          end
-        end
-
-        raise FilterError.new('Cannot filter by: ' + failed.join(', ')) unless failed.empty?
+        filter.parse!(self, params)
 
         filter
       end

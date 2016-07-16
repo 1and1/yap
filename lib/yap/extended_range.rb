@@ -1,24 +1,20 @@
 module Yap
   class ExtendedRange < Range
     def begin
-      infinity_or_do_not_change super
+      handle_infinity super
     end
 
     def end
-      infinity_or_do_not_change super
+      handle_infinity super
     end
 
-    def infinity_or_do_not_change(value)
-      if value.is_a? StringInfinity
-        if value == String::INFINITY
-          Float::INFINITY
-        elsif value == -String::INFINITY
-          -Float::INFINITY
-        else
-          raise ArgumentError, "Invalid value for StringInfinity."
-        end
+    def handle_infinity(value)
+      return value unless value.is_a? StringInfinity
+
+      if value == -String::INFINITY
+        -Float::INFINITY
       else
-        value
+        Float::INFINITY
       end
     end
   end

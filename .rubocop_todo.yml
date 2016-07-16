@@ -6,26 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 2
-# Configuration parameters: CountComments.
-Metrics/ClassLength:
-  Max: 243
-
-# Offense count: 1
-Metrics/CyclomaticComplexity:
-  Max: 8
-
-# Offense count: 31
-# Configuration parameters: AllowHeredoc, AllowURI, URISchemes.
-# URISchemes: http, https
-Metrics/LineLength:
-  Max: 162
-
-# Offense count: 12
-# Configuration parameters: CountComments.
-Metrics/MethodLength:
-  Max: 29
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Performance/Casecmp:

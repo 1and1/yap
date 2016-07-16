@@ -1,62 +1,52 @@
-require 'yap/extended_range'
+require 'yap/filter_column'
 
 module Yap
-  class Filter < Hash
+  class Filter
     def initialize
-      self[:where] = {}
-      self[:not] = {}
+      @failed = []
+      @columns = []
     end
 
-    def parse!(column, values)
-      values.to_s.split(',').each do |value|
-        condition, value = parse_value(value)
-
-        self[condition][column] ||= []
-        self[condition][column] << value
+    def parse!(model, params)
+      params.each do |attribute, values|
+        parse_arrtibute(model, attribute, values)
       end
+
+      raise FilterError, "Cannot filter by: #{@failed.join(', ')}" unless @failed.empty?
+    end
+
+    def where
+      extract_filters(:where)
+    end
+
+    def not
+      extract_filters(:not)
     end
 
     private
 
-    def parse_value(value)
-      # Perform negative match if value starts with '!'.
-      if value =~/^!(.+)$/
-        condition = :not
-        value = $1
-      else
-        condition = :where
-      end
+    def extract_filters(condition)
+      @columns.inject({}) do |filter, column|
+        values = column.send(condition)
 
-      case value
-      when /([<>]=?)(.+)/
-        condition, value = handle_comparison_operators(condition, $1.to_sym, $2)
-      when /(.+)\.{3}(.+)/
-        value = $1...$2
-      when /(.+)\.{2}(.+)/
-        value = $1..$2
-      else
-        # Convert null to ruby nil to use 'IS NULL' in SQL.
-        value = value.downcase == 'null' ? nil : value
-      end
-
-      [condition, value]
-    end
-
-    def handle_comparison_operators(condition, operator, value)
-      case operator
-      when :<
-        handle_comparison_operators(toggle_condition(condition), :>=, value)
-      when :>
-        handle_comparison_operators(toggle_condition(condition), :<=, value)
-      when :<=
-        return condition, ExtendedRange.new(-String::INFINITY, value)
-      when :>=
-        return condition, ExtendedRange.new(value, String::INFINITY)
+        if values.empty?
+          filter
+        else
+          filter.merge(column.name => values.size == 1 ? values.first : values)
+        end
       end
     end
 
-    def toggle_condition(condition)
-      condition == :where ? :not : :where
+    def parse_arrtibute(model, attribute, values)
+      column = model.map_column(attribute.to_s.downcase)
+      if column.nil?
+        @failed << attribute
+        return
+      end
+
+      filter_column = FilterColumn.new(column)
+      filter_column.parse_values(values)
+      @columns << filter_column
     end
   end
 end

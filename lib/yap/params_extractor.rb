@@ -43,32 +43,41 @@ module Yap
 
     def extract_order(params)
       sort, direction = params.values_at(:sort, :direction)
-      sort = sort.split(',') if sort.is_a?(String)
 
       case sort
-      when Array
-        direction = direction.split(',') if direction.is_a?(String)
-        direction ||= []
-        build_order_by_from_array(sort, direction)
+      when Array, String
+        build_order_from_array(sort, direction)
       when Hash
-        sort.map do |s, d|
-          build_order_by(s, d)
-        end
+        build_order_from_hash(sort)
       else # nil or symbol
-        build_order_by sort, direction
+        build_order sort, direction
       end
     end
 
-    def build_order_by_from_array(sort, direction)
+    def build_order_from_array(sort, direction = [])
+      sort = convert_to_array(sort) unless sort.is_a?(Hash)
+      direction = convert_to_array(direction)
       order = []
       sort.each_with_index do |s, i|
-        order << build_order_by(s, direction[i] || DEFAULTS.direction)
+        order << build_order(s, direction[i] || DEFAULTS.direction)
       end
 
       order
     end
 
-    def build_order_by(sort, direction)
+    def convert_to_array(object)
+      object = object.split(',') if object.is_a?(String)
+
+      Array.wrap(object)
+    end
+
+    def build_order_from_hash(sort)
+      sort.map do |s, d|
+        build_order(s, d)
+      end
+    end
+
+    def build_order(sort, direction)
       sort = extract_column(sort || DEFAULTS.sort)
       direction = extract_direction(direction)
 
@@ -78,13 +87,17 @@ module Yap
     def extract_column(sort)
       column = map_column(sort.to_s.downcase)
       raise PaginationError, "Cannot sort by '#{sort}'." unless column
+
       column
     end
 
     def extract_direction(direction)
       direction ||= DEFAULTS.direction
       dir = direction.to_sym.downcase
-      raise PaginationError, "'#{direction}' is not a valid direction. Use 'asc' or 'desc'." unless [:asc, :desc].include? dir
+      unless [:asc, :desc].include? dir
+        raise PaginationError, "'#{direction}' is not a valid direction. Use 'asc' or 'desc'."
+      end
+
       dir
     end
   end

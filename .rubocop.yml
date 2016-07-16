@@ -8,5 +8,14 @@ AllCops:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
+Metrics/LineLength:
+  Max: 120
+
 Lint/EndAlignment:
   AlignWith: variable
+
+Style/CaseIndentation:
+  IndentWhenRelativeTo: end
+
+Style/PerlBackrefs:
+  Enabled: false

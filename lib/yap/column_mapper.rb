@@ -1,6 +1,4 @@
 module ColumnMapper
-  private
-
   def map_column(name)
     if column_names.include?(name)
       name
