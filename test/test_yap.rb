@@ -17,7 +17,7 @@ class TestYap < ActiveSupport::TestCase
     assert_equal 2, conf.page
     assert_equal 7, conf.per_page
     assert_equal :name, conf.sort
-
+  ensure
     restore_defaults
   end
 
@@ -40,7 +40,7 @@ class TestYap < ActiveSupport::TestCase
     assert_nothing_raised do
       User.paginate
     end
-
+  ensure
     restore_defaults
   end
 
@@ -78,7 +78,7 @@ class TestYap < ActiveSupport::TestCase
       User.paginate(valid_params.except(:direction))
     end
     assert_match 'invalid_direction', ex.message
-
+  ensure
     restore_defaults
   end
 
