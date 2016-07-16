@@ -8,14 +8,6 @@
 
 # Offense count: 1
 # Cop supports --auto-correct.
-# Configuration parameters: AlignWith, SupportedStyles, AutoCorrect.
-# SupportedStyles: keyword, variable, start_of_line
-Lint/EndAlignment:
-  Exclude:
-    - 'lib/yap/column_mapper.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
 # Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
 Lint/UnusedBlockArgument:
   Exclude:
