@@ -29,9 +29,6 @@ class TestColumnMapper < ActiveSupport::TestCase
   end
 
   def test_undefined_method
-    Yap.configure do |d|
-      d.disable_warnings = true
-    end
     assert_nothing_raised do
       Team.paginate(sort: 'name')
     end

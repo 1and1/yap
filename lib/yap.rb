@@ -1,6 +1,6 @@
 require 'active_support/concern'
 require 'yap/active_record/relation'
-require 'yap/column_mapper'
+require 'yap/params_extractor'
 require 'yap/filterable'
 require 'yap/exceptions'
 require 'string_infinity'
@@ -40,7 +40,7 @@ module Yap
   end
 
   included do
-    extend ColumnMapper
+    extend ParamsExtractor
 
     ##
     # The paginate scope takes a hash as parameter. All options are optional and can be combined arbitrarily.
@@ -51,72 +51,5 @@ module Yap
       page, per_page, order_by = extract_pagination_params(params)
       filter(params[:filter]).limit(per_page).offset((page-1)*per_page).order(order_by)
     }
-
-    def self.extract_pagination_params(params)
-      page = extract_number(params[:page], DEFAULTS.page)
-      per_page = extract_number(params[:per_page], DEFAULTS.per_page)
-      if DEFAULTS.hard_limit && per_page > DEFAULTS.hard_limit
-        raise PaginationError.new("Not more than #{DEFAULTS.hard_limit} items per page accepted.")
-      end
-      sort = extract_order(params[:sort], params[:direction])
-
-      return page, per_page, sort
-    end
-
-    def self.extract_number(number, default)
-      number ||= default
-      begin
-        number = Integer(number)
-      rescue
-        raise PaginationError.new("'#{number}' is not a valid number.")
-      end
-
-      raise PaginationError.new('Only positive numbers are accepted.') unless number > 0
-      number
-    end
-
-    def self.extract_order(sort, direction)
-      sort = sort.split(',') if sort.is_a?(String) && sort =~ /,/
-      direction = direction.split(',') if direction.is_a?(String) && direction =~ /,/
-
-      case sort
-      when Array
-        order = []
-        direction = Array.wrap direction
-        sort.each_with_index do |s, i|
-          order << build_order_by(s, direction[i] || DEFAULTS.direction)
-        end
-
-        order
-      when Hash
-        sort.map do |s, d|
-          build_order_by(s, d)
-        end
-      else
-        build_order_by sort, direction
-      end
-    end
-
-    def self.build_order_by(sort, direction)
-      sort = extract_column(sort)
-      direction = extract_direction(direction)
-
-      (sort =~ /\./ ? "#{sort} #{direction}" : { sort => direction })
-    end
-    private_class_method :build_order_by
-
-    def self.extract_column(sort)
-      sort ||= DEFAULTS.sort
-      column = map_column(sort.to_s.downcase)
-      raise PaginationError.new("Cannot sort by '#{sort}'.") unless column
-      column
-    end
-
-    def self.extract_direction(direction)
-      direction ||= DEFAULTS.direction
-      dir = (direction).to_sym.downcase
-      raise PaginationError.new("'#{direction}' is not a valid direction. Use 'asc' or 'desc'.") unless [:asc, :desc].include? dir
-      dir
-    end
   end
 end

@@ -22,7 +22,7 @@ class FilterableTest < ActiveSupport::TestCase
   def test_multiple_conditions
     team = Team.first
     users = User.filter(team_id: team.id, gender: 'm')
-    assert_equal team.users.select { |u| u.gender == 'm' }.size, users.size
+    assert_equal team.users.where(gender: 'm').count, users.size
     users.each do |user|
       assert_equal 'm', user.gender
       assert_equal team.id, user.team_id
