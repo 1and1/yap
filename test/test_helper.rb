@@ -1,5 +1,9 @@
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
+begin
+  require 'codeclimate-test-reporter'
+  CodeClimate::TestReporter.start
+rescue LoadError
+  puts 'Not reporting test coverage to codeclimate.com. Gem is not installed.'
+end
 
 require 'active_record'
 require 'minitest/autorun'
