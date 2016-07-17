@@ -55,7 +55,7 @@ module Yap
     end
 
     def build_order_from_array(sort, direction = [])
-      sort = convert_to_array(sort) unless sort.is_a?(Hash)
+      sort = convert_to_array(sort)
       direction = convert_to_array(direction)
       order = []
       sort.each_with_index do |s, i|

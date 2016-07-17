@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/1and1/yap.svg?branch=master)](https://travis-ci.org/1and1/yap)
+[![Build Status](https://travis-ci.org/1and1/yap.svg?branch=master)](https://travis-ci.org/1and1/yap) [![Test Coverage](https://codeclimate.com/github/1and1/yap/badges/coverage.svg)](https://codeclimate.com/github/1and1/yap/coverage) [![Code Climate](https://codeclimate.com/github/1and1/yap/badges/gpa.svg)](https://codeclimate.com/github/1and1/yap)
 
 Yet another paginator for Ruby on Rails, which adds a `paginate` scope to your ActiveRecords.
 
