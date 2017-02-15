@@ -35,7 +35,7 @@ module Yap
         raise PaginationError, "'#{number}' is not a valid number."
       end
 
-      raise PaginationError, 'Only positive numbers are accepted.' unless number > 0
+      raise PaginationError, 'Only positive numbers are accepted.' unless number.positive?
       number
     end
 

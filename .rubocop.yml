@@ -11,10 +11,10 @@ Metrics/LineLength:
   Max: 120
 
 Lint/EndAlignment:
-  AlignWith: variable
+  EnforcedStyleAlignWith: variable
 
 Style/CaseIndentation:
-  IndentWhenRelativeTo: end
+  EnforcedStyle: end
 
 Style/PerlBackrefs:
   Enabled: false

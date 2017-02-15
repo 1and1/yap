@@ -1,6 +1,7 @@
 *.gem
 *.lock
 rubocop_cache
+coverage
 
 # RubyMine configuration
 .idea

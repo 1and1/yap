@@ -31,7 +31,7 @@ module ActiveRecord
     def last_page
       page = (total / limit_value.to_f).ceil
 
-      page == 0 ? 1 : page
+      page.zero? ? 1 : page
     end
 
     ##
