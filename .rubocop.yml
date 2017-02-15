@@ -22,6 +22,9 @@ Style/PerlBackrefs:
 Style/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
+Style/NumericPredicate:
+  Enabled: false
+
 Style/Documentation:
   Exclude:
     - 'db/models.rb'
