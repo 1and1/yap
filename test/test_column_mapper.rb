@@ -36,4 +36,8 @@ class TestColumnMapper < ActiveSupport::TestCase
       Team.paginate(filer: { 'name' => 'Moderator' } )
     end
   end
+
+  def test_alias_vs_real_column
+    assert_equal 'name', User.map_column('last_name')
+  end
 end

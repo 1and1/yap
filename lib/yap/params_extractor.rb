@@ -5,8 +5,6 @@ module Yap
   # Methods for extracting valid pagination parameters from rails params.
   #
   module ParamsExtractor
-    extend ColumnMapper
-
     def extract_pagination_params(params)
       page = extract_page(params)
       per_page = extract_per_page(params)
