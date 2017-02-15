@@ -2,4 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'codeclimate-test-reporter', group: :test, require: nil
+group :test do
+  gem 'codeclimate-test-reporter', require: false
+  gem 'rubocop', '~> 0.47', require: false
+end
