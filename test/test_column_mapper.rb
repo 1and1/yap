@@ -1,6 +1,61 @@
 require 'test_helper'
 
 class TestColumnMapper < ActiveSupport::TestCase
+  def fake_model
+    Class.new(ActiveRecord::Base) do
+      self.table_name = 'teams'
+      include Yap
+    end
+  end
+
+  def test_api_aliases_with_hash
+    fake = fake_model
+    fake.api_aliases foo: :bar, 'bar' => 'baz'
+
+    assert_equal 'bar', fake.map_column('foo')
+    assert_equal 'baz', fake.map_column('bar')
+  end
+
+  def test_api_aliases_with_block
+    fake = fake_model
+    fake.api_aliases do |a|
+      a.camelize
+    end
+
+    assert_equal 'FooBar', fake.map_column('foo_bar')
+  end
+
+  def test_api_aliases_with_multiple_arguments
+    fake = fake_model
+
+    ex = assert_raises ArgumentError do
+      fake.api_aliases foo: :bar do |a|
+        a.camelize
+      end
+    end
+    assert_equal 'Only one of the following allowed: Hash of aliases or block.', ex.message
+  end
+
+  def test_api_aliases_with_no_arguments
+    fake = fake_model
+
+    assert_nothing_raised do
+      fake.api_aliases
+    end
+  end
+
+  def test_api_aliases_multiple_invocations
+    fake = fake_model
+    fake.api_aliases foo: :bar, 'bar' => 'baz'
+
+    ex = assert_raises do
+      fake.api_aliases do |a|
+        a.camelize
+      end
+    end
+    assert_equal 'Aliases already defined. Make sure to invoke api_aliases only once.', ex.message
+  end
+
   def test_sort_with_alias
     dobs = User.paginate(sort: 'birthday').to_a.map(&:date_of_birth)
     assert_equal dobs, dobs.sort
