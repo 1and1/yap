@@ -25,6 +25,9 @@ Style/MultilineMethodCallIndentation:
 Style/NumericPredicate:
   Enabled: false
 
+Style/AlignHash:
+  Enabled: false
+
 Style/Documentation:
   Exclude:
     - 'db/models.rb'
