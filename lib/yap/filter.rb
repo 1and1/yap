@@ -38,7 +38,7 @@ module Yap
     end
 
     def parse_arrtibute(model, attribute, values)
-      column = model.map_column(attribute.to_s.downcase)
+      column = model.map_column(attribute.to_s)
       if column.nil?
         @failed << attribute
         return

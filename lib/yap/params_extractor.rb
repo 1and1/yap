@@ -83,7 +83,7 @@ module Yap
     end
 
     def extract_column(sort)
-      column = map_column(sort.to_s.downcase)
+      column = map_column(sort.to_s)
       raise PaginationError, "Cannot sort by '#{sort}'." unless column
 
       column
