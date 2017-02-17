@@ -56,6 +56,15 @@ class TestColumnMapper < ActiveSupport::TestCase
     assert_equal 'Aliases already defined. Make sure to invoke api_aliases only once.', ex.message
   end
 
+  def test_api_aliases_with_wrong_argument
+    fake = fake_model
+
+    ex = assert_raises do
+      fake.api_aliases [:foobar]
+    end
+    assert_equal 'Expected first argument to be a Hash, got Array.', ex.message
+  end
+
   def test_sort_with_alias
     dobs = User.paginate(sort: 'birthday').to_a.map(&:date_of_birth)
     assert_equal dobs, dobs.sort
