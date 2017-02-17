@@ -24,11 +24,14 @@ module ColumnMapper
     actual_column = name if column_names.include?(name)
 
     column_alias = if _api_aliases.is_a? Hash
-      _api_aliases[name.to_sym].to_s
+      _api_aliases[name.to_sym]
     elsif _api_aliases.is_a? Proc
-      _api_aliases.call(name).to_s
+      _api_aliases.call(name)
     end
 
-    column_alias || actual_column
+    result = column_alias || actual_column
+    return if result.blank?
+
+    result.to_s
   end
 end
