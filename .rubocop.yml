@@ -29,7 +29,6 @@ Style/AlignHash:
 
 Style/Documentation:
   Exclude:
-    - 'db/models.rb'
     - 'lib/string_infinity.rb'
     - 'lib/yap/active_record/relation.rb'
     - 'lib/yap/column_mapper.rb'
