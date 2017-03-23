@@ -1,6 +1,8 @@
 begin
   require 'simplecov'
-  SimpleCov.start
+  SimpleCov.start do
+    add_filter '/test/'
+  end
 rescue LoadError
   puts 'Not reporting test coverage to codeclimate.com. Gem is not installed.'
 end
@@ -13,8 +15,8 @@ require 'yap/exceptions'
 
 ActiveRecord::Base.establish_connection(:adapter => 'sqlite3', :database => ':memory:')
 
-require './db/schema'
-require './db/models'
+require 'db/schema'
+require 'db/models'
 
 ActiveSupport.test_order = :random if ActiveSupport.respond_to? :test_order=
 
