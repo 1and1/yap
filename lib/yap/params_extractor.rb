@@ -92,7 +92,7 @@ module Yap
     def extract_direction(direction)
       direction ||= DEFAULTS.direction
       dir = direction.to_sym.downcase
-      unless [:asc, :desc].include? dir
+      unless %i[asc desc].include? dir
         raise PaginationError, "'#{direction}' is not a valid direction. Use 'asc' or 'desc'."
       end
 
