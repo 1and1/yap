@@ -2,14 +2,9 @@ language: ruby
 rvm:
   - 2.4.1
   - 2.3.3
-  - 1.9.3
 gemfile:
   - Gemfile
   - GemfileAR42
-matrix:
-  exclude:
-    - rvm: 1.9.3
-      gemfile: Gemfile
 addons:
     code_climate:
         repo_token: 34d3a479c414f5772d8b45ce8074a6e13997b9a91ea62112e651f3e8e962f97b

@@ -164,6 +164,10 @@ If an option cannot be parsed it will raise `Yap::PaginationError` or `Yap::Filt
 
 ## Changelog
 
+### 2.0
+
+* dropped support for ruby 1.9.x
+
 ### 1.4
 
 * added support for strings and dates with comparison parameters
