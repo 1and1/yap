@@ -168,6 +168,7 @@ If an option cannot be parsed it will raise `Yap::PaginationError` or `Yap::Filt
 
 * [BREAKING] dropped support for ruby 1.9.x
 * [BREAKING] renamed `filter` method to `filtered` due to a conflict with a new method in `Activerecord::Relation`
+* [BREAKING] dropped support for activerecord 4
 
 ### 1.4
 
