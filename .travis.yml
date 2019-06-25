@@ -8,6 +8,12 @@ gemfile:
   - GemfileAR42
   - GemfileAR52
   - GemfileARlatest
+matrix:
+  exclude:
+    - rvm: 2.4.1
+      gemfile: GemfileARlatest
+    - rvm: 2.3.3
+      gemfile: GemfileARlatest
 addons:
     code_climate:
         repo_token: 34d3a479c414f5772d8b45ce8074a6e13997b9a91ea62112e651f3e8e962f97b
