@@ -7,6 +7,7 @@ module ColumnMapper
 
     if block_given?
       raise ArgumentError, 'Only one of the following allowed: Hash of aliases or block.' if aliases.present?
+
       @_api_aliases = block
     end
 
@@ -14,9 +15,7 @@ module ColumnMapper
   end
 
   def api_aliases_hash(aliases)
-    unless aliases.is_a? Hash
-      raise ArgumentError, "Expected first argument to be a Hash, got #{aliases.class.name}."
-    end
+    raise ArgumentError, "Expected first argument to be a Hash, got #{aliases.class.name}." unless aliases.is_a? Hash
 
     @_api_aliases = aliases.symbolize_keys
 

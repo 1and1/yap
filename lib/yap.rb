@@ -32,6 +32,7 @@ module Yap
 
   def self.configure
     raise ArgumentError, 'No block given.' unless block_given?
+
     yield(DEFAULTS)
   end
 

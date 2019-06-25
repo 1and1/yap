@@ -36,6 +36,7 @@ module Yap
       end
 
       raise PaginationError, 'Only positive numbers are accepted.' unless number > 0
+
       number
     end
 
