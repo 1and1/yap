@@ -8,17 +8,17 @@ require 'yap/filter'
 # be applied through the filter or paginate scope. Multiple filters for the same attribute can be separated by comma,
 # negative filters have a leading exclamation mark (!) and 'null' will be translated to the NULL value.
 #
-#   User.filter('gender' => 'f')        # => All female users.
-#   User.filter(
+#   User.filtered('gender' => 'f')      # => All female users.
+#   User.filtered(
 #       'team_id' => '1,2',
 #       'gender' => 'm'
 #   )                                   # => All males of teams 1 and 2.
-#   User.filter('team_id' => '!null')   # => All users with any team.
+#   User.filtered('team_id' => '!null') # => All users with any team.
 #   User.paginate(params)               # => Passing parameters in controller (http://localhost/users?filter[gender]=f)
 #   User.paginate(
 #       page:   1,
 #       filter: { 'team' => 'null' }
-#   )                                    # => Combining filter and pagination.
+#   )                                   # => Combining filter and pagination.
 #
 module Yap
   module Filterable
@@ -32,7 +32,7 @@ module Yap
       #
       # @param [Hash] Attribute/value pairs to filter ( { 'gender' => 'f' } )
       #
-      scope :filter, lambda { |params = nil|
+      scope :filtered, lambda { |params = nil|
         if params.blank?
           all
         else

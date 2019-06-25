@@ -49,7 +49,7 @@ module Yap
     #
     scope :paginate, lambda { |params = {}|
       page, per_page, order_by = extract_pagination_params(params)
-      filter(params[:filter]).limit(per_page).offset((page - 1) * per_page).order(order_by)
+      filtered(params[:filter]).limit(per_page).offset((page - 1) * per_page).order(order_by)
     }
   end
 end

@@ -76,7 +76,7 @@ class TestColumnMapper < ActiveSupport::TestCase
   end
 
   def test_filter_with_alias
-    users = User.filter(sex: 'f')
+    users = User.filtered(sex: 'f')
     assert User.where(gender: 'f').size, users.size
     users.each do |user|
       assert_equal 'f', user.gender
@@ -85,7 +85,7 @@ class TestColumnMapper < ActiveSupport::TestCase
 
   def test_filter_by_association
     team = Team.first
-    users = User.joins(:team).filter(team: team.name)
+    users = User.joins(:team).filtered(team: team.name)
     assert_equal team.users.size, users.size
     users.each do |user|
       assert_equal team.name, user.team.name

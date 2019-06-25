@@ -80,22 +80,22 @@ Assuming you included `Yap` into `User`, you can now do something like this:
     User.paginate(sort: 'gender,date_of_birth', direction: 'desc,asc')
     # => Sort by gender and date_of_birth (method 2)
 
-    User.filter('gender' => 'f')
+    User.filtered('gender' => 'f')
     # => All female users
 
-    User.filter(
+    User.filtered(
         'team_id' => '1,2',
         'gender' => 'm'
     )
     # => All males of teams 1 and 2
 
-    User.filter(
+    User.filtered(
         # Note that '0...3' means [0,1,2] while '0..3' means [0,1,2,3]
         'date_of_birth' => '1990-01-01...1991-01-01'
     )
     # => All users born in 1990
 
-    User.filter('team_id' => '!null')
+    User.filtered('team_id' => '!null')
     # => All users with any team
 
     User.paginate(
