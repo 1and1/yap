@@ -9,7 +9,7 @@ Style/FrozenStringLiteralComment:
 Metrics/LineLength:
   Max: 120
 
-Lint/EndAlignment:
+Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
 
 Layout/CaseIndentation:
