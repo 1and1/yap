@@ -10,9 +10,9 @@ gemfile:
   - GemfileARlatest
 matrix:
   exclude:
-    - rvm: 2.4.1
+    - rvm: 2.4.9
       gemfile: GemfileARlatest
-    - rvm: 2.3.3
+    - rvm: 2.3.8
       gemfile: GemfileARlatest
 addons:
     code_climate:
