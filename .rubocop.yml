@@ -3,29 +3,20 @@ AllCops:
   Exclude:
     - test/**/*
 
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
-Metrics/LineLength:
-  Max: 120
+Layout/CaseIndentation:
+  EnforcedStyle: end
 
 Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
 
-Layout/CaseIndentation:
-  EnforcedStyle: end
-
-Style/PerlBackrefs:
+Layout/HashAlignment:
   Enabled: false
+
+Layout/LineLength:
+  Max: 120
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
-
-Style/NumericPredicate:
-  Enabled: false
-
-Layout/AlignHash:
-  Enabled: false
 
 Style/Documentation:
   Exclude:
@@ -34,3 +25,21 @@ Style/Documentation:
     - 'lib/yap/column_mapper.rb'
     - 'lib/yap/filter.rb'
     - 'lib/yap/filterable.rb'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/PerlBackrefs:
+  Enabled: false
