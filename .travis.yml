@@ -1,8 +1,9 @@
 language: ruby
 rvm:
-  - 2.6.3
-  - 2.4.1
-  - 2.3.3
+  - 2.7.0
+  - 2.6.5
+  - 2.4.9
+  - 2.3.8
 gemfile:
   - Gemfile
   - GemfileAR52
